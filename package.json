@@ -1,0 +1,13 @@
+{
+  "name": "still-forest-917b",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "deploy": "wrangler deploy",
+    "dev": "wrangler dev",
+    "start": "wrangler dev"
+  },
+  "devDependencies": {
+    "wrangler": "^4.148.0"
+  }
+}
