@@ -15,7 +15,7 @@
     {
       "pattern": "music.moth.mov/*",
       "zone_name": "moth.mov"
-    },
+    }
   ],
   "observability": {
     "enabled": true,

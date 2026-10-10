@@ -5,6 +5,7 @@ import {
   spaceBackgroundStyles,
   createSpaceBackgroundScript,
 } from '../components/space-background.js';
+import { sharedStyles } from '../styles/shared.js';
 
 const escapeHtml = value => value.replace(/[&<>"']/g, character => ({
   '&': '&amp;',
@@ -36,6 +37,7 @@ export const musicPage = `<!doctype html>
   <style>
 ${spaceBackgroundStyles}
 ${musicStyles}
+${sharedStyles}
   </style>
 </head>
 <body>
@@ -45,6 +47,7 @@ ${musicStyles}
     <ul class="tracks">${trackList}
     </ul>
     <a href="https://moth.mov/">back to moth.mov</a>
+    <p class="signature">music.moth.mov</p>
   </main>
   <script>${createSpaceBackgroundScript()}<\/script>
 </body>
