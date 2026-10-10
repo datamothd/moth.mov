@@ -13,13 +13,6 @@ export const homeStyles = `
         radial-gradient(ellipse at 50% 110%, rgba(20, 55, 88, 0.25), transparent 50%),
         #050711;
     }
-    canvas {
-      position: fixed;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      display: block;
-    }
     .haze {
       position: fixed;
       inset: -20%;

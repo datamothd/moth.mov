@@ -1,3 +1,4 @@
+import { skyBackgroundMarkup, skyBackgroundStyles } from '../components/sky-background.js';
 import { sharedStyles } from '../styles/shared.js';
 import { homeStyles } from '../styles/home.js';
 import { homeScript } from '../scripts/home.js';
@@ -18,11 +19,12 @@ export const homePage = `<!doctype html>
   <title>moth.mov</title>
   <style>
 ${sharedStyles}
+${skyBackgroundStyles}
 ${homeStyles}
   </style>
 </head>
 <body>
-  <canvas aria-hidden="true"></canvas>
+  ${skyBackgroundMarkup}
   <div class="haze" aria-hidden="true"></div>
   <a class="navigation-link" href="/kirby" aria-label="Socials">
     <span>socials</span>

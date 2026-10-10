@@ -32,13 +32,6 @@ export const socialsStyles = `
       font-family: var(--font-family);
       background: #000000;
     }
-    .sky {
-      position: fixed;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-    }
     .glow {
       position: fixed;
       inset: -25%;

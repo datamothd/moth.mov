@@ -1,16 +1,13 @@
 {
-  "name": "still-forest-917b",
+  "name": "moth-mov",
   "main": "src/worker.js",
   "workers_dev": true,
   "preview_urls": false,
   "compatibility_date": "2026-09-26",
   "routes": [
     {
-      "pattern": "music.moth.mov",
-      "zone_name": "moth.mov",
-      "custom_domain": true,
-      "enabled": true,
-      "previews_enabled": false
+      "pattern": "music.moth.mov/*",
+      "zone_name": "moth.mov"
     },
     {
       "pattern": "moth.mov",

@@ -1,3 +1,4 @@
+import { skyBackgroundMarkup, skyBackgroundStyles } from '../components/sky-background.js';
 import { sharedStyles } from '../styles/shared.js';
 import { socialsStyles } from '../styles/socials.js';
 import { socialsScript } from '../scripts/socials.js';
@@ -19,21 +20,22 @@ export const socialsPage = `<!doctype html>
   <title>kirby \xB7 moth.mov</title>
   <style>
 ${sharedStyles}
+${skyBackgroundStyles}
 ${socialsStyles}
   </style>
 </head>
 <body>
-  <canvas class="sky" aria-hidden="true"></canvas>
+  ${skyBackgroundMarkup}
   <div class="glow" aria-hidden="true"></div>
   <div class="shell">
     <div class="entry-dimmer" aria-hidden="true"></div>
     <div class="music-widget" hidden>
       <audio
-      class="music-player"
-      controls
-      hidden
-      preload="auto"
-      crossorigin="anonymous"
+        class="music-player"
+        controls
+        hidden
+        preload="auto"
+        crossorigin="anonymous"
       ></audio>
       <div class="song-title" role="img" aria-label="Current song">
         <div class="song-title-scroll" aria-hidden="true"><span></span><span></span></div>
