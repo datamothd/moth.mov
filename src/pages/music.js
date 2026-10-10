@@ -46,8 +46,23 @@ ${sharedStyles}
     <h1>music</h1>
     <ul class="tracks">${trackList}
     </ul>
-    <a href="https://moth.mov/">back to moth.mov</a>
     <p class="signature">music.moth.mov</p>
+    <a class="navigation-link back" href="https://moth.mov/" aria-label="Back to moth.mov">
+      <svg
+        viewBox="0 0 20 20"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.7"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
+        <line x1="15.5" y1="10" x2="4.5" y2="10" />
+        <line x1="4.5" y1="10" x2="9" y2="5.5" />
+        <line x1="4.5" y1="10" x2="9" y2="14.5" />
+      </svg>
+      <span>back</span>
+    </a>
   </main>
   <script>${createSpaceBackgroundScript()}<\/script>
 </body>
