@@ -1,6 +1,7 @@
 import { homePage } from './pages/home.js';
 import { socialsPage } from './pages/socials.js';
 import { ratingsPage } from './pages/ratings.js';
+import { musicPage } from './pages/music.js';
 
 const htmlHeaders = {
   "content-type": "text/html; charset=UTF-8",
@@ -11,6 +12,9 @@ const pages = new Map([
   ["/kirby", socialsPage],
   ["/ratings", ratingsPage]
 ]);
+const subdomains = new Map([
+  ["music.moth.mov", musicPage]
+]);
 export default {
   fetch(request) {
     const { hostname, pathname, origin } = new URL(request.url);
@@ -20,7 +24,7 @@ export default {
     if (pathname !== "/" && !pages.has(pathname) && !socialsAliases.has(pathname)) {
       return Response.redirect(`${origin}/`, 302);
     }
-    const page = hostname === "moth.mov" ? pages.get(pathname) ?? homePage : homePage;
+    const page = subdomains.get(hostname) ?? (hostname === "moth.mov" ? pages.get(pathname) ?? homePage : homePage);
     return new Response(page, { headers: htmlHeaders });
   }
 };

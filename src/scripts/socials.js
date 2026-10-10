@@ -10,7 +10,7 @@ ${audioVisualizerScript}
       const tracks = [
         {
           title: "I Am Robot And Proud - Places We're Trying to Find",
-          url: "https://music.moth.mov/I%20Am%20Robot%20And%20Proud%20-%20Places%20We're%20Trying%20to%20Find.flac?visualizer=2",
+          url: "https://music.moth.mov/I%20Am%20Robot%20And%20Proud%20-%20Places%20We're%20Trying%20to%20Find.flac",
         },
         {
           title: "Accelera Deck - Crystallized",

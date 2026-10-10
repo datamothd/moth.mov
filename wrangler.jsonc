@@ -6,6 +6,13 @@
   "compatibility_date": "2026-09-26",
   "routes": [
     {
+      "pattern": "music.moth.mov",
+      "zone_name": "moth.mov",
+      "custom_domain": true,
+      "enabled": true,
+      "previews_enabled": false
+    },
+    {
       "pattern": "moth.mov",
       "zone_name": "moth.mov",
       "custom_domain": true,
