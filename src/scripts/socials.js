@@ -1,6 +1,6 @@
 import { audioVisualizerScript } from './audio-visualizer.js';
 import { musicOrigin, tracks } from '../data/music.js';
-import { createSkyBackgroundScript } from './sky.js';
+import { createSpaceBackgroundScript } from './space.js';
 
 export const socialsScript = `
 ${audioVisualizerScript}
@@ -48,5 +48,5 @@ ${audioVisualizerScript}
       document.addEventListener('click', enter);
     })();
 
-${createSkyBackgroundScript()}
+${createSpaceBackgroundScript()}
 `;

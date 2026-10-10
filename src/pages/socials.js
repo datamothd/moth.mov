@@ -1,4 +1,4 @@
-import { skyBackgroundMarkup, skyBackgroundStyles } from '../components/sky-background.js';
+import { spaceBackgroundMarkup, spaceBackgroundStyles } from '../components/space-background.js';
 import { sharedStyles } from '../styles/shared.js';
 import { socialsStyles } from '../styles/socials.js';
 import { socialsScript } from '../scripts/socials.js';
@@ -20,12 +20,12 @@ export const socialsPage = `<!doctype html>
   <title>kirby \xB7 moth.mov</title>
   <style>
 ${sharedStyles}
-${skyBackgroundStyles}
+${spaceBackgroundStyles}
 ${socialsStyles}
   </style>
 </head>
 <body>
-  ${skyBackgroundMarkup}
+  ${spaceBackgroundMarkup}
   <div class="glow" aria-hidden="true"></div>
   <div class="shell">
     <div class="entry-dimmer" aria-hidden="true"></div>

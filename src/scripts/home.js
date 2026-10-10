@@ -1,3 +1,3 @@
-import { createSkyBackgroundScript } from './sky.js';
+import { createSpaceBackgroundScript } from './space.js';
 
-export const homeScript = createSkyBackgroundScript('home');
+export const homeScript = createSpaceBackgroundScript('home');

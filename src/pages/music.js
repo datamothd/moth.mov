@@ -1,10 +1,10 @@
 import { tracks } from '../data/music.js';
 import { musicStyles } from '../styles/music.js';
 import {
-  skyBackgroundMarkup,
-  skyBackgroundStyles,
-  createSkyBackgroundScript,
-} from '../components/sky-background.js';
+  spaceBackgroundMarkup,
+  spaceBackgroundStyles,
+  createSpaceBackgroundScript,
+} from '../components/space-background.js';
 
 const escapeHtml = value => value.replace(/[&<>"']/g, character => ({
   '&': '&amp;',
@@ -34,18 +34,18 @@ export const musicPage = `<!doctype html>
   <meta name="theme-color" content="#000000">
   <title>music · moth.mov</title>
   <style>
-${skyBackgroundStyles}
+${spaceBackgroundStyles}
 ${musicStyles}
   </style>
 </head>
 <body>
-  ${skyBackgroundMarkup}
+  ${spaceBackgroundMarkup}
   <main>
     <h1>music</h1>
     <ul class="tracks">${trackList}
     </ul>
     <a href="https://moth.mov/">back to moth.mov</a>
   </main>
-  <script>${createSkyBackgroundScript()}<\/script>
+  <script>${createSpaceBackgroundScript()}<\/script>
 </body>
 </html>`;

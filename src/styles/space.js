@@ -1,5 +1,5 @@
-export const skyBackgroundStyles = `
-    .sky {
+export const spaceBackgroundStyles = `
+    .space {
       position: fixed;
       inset: 0;
       width: 100%;

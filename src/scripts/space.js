@@ -75,7 +75,8 @@ const presets = {
   },
 };
 
-export function setupSkyBackground(canvas, animation) {
+const spaceBackgroundScript = `
+function setupSpaceBackground(canvas, animation) {
   const context = canvas?.getContext('2d');
   if (!context) return () => {};
 
@@ -252,9 +253,10 @@ export function setupSkyBackground(canvas, animation) {
     document.removeEventListener('visibilitychange', onVisibilityChange);
   };
 }
+`;
 
-export function createSkyBackgroundScript(preset = 'socials', overrides = {}) {
-  if (!Object.hasOwn(presets, preset)) throw new Error(`Unknown sky preset: ${preset}`);
+export function createSpaceBackgroundScript(preset = 'socials', overrides = {}) {
+  if (!Object.hasOwn(presets, preset)) throw new Error(`Unknown space preset: ${preset}`);
   const settings = JSON.stringify({ ...defaults, ...presets[preset], ...overrides }).replace(/</g, '\\u003c');
-  return `(${setupSkyBackground.toString()})(document.querySelector('.sky'), ${settings});`;
+  return `(${spaceBackgroundScript})(document.querySelector('.space'), ${settings});`;
 }
