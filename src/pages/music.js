@@ -70,6 +70,11 @@ ${sharedStyles}
       <span>back</span>
     </a>
   </main>
-  <script>${createSpaceBackgroundScript()}<\/script>
 </body>
+<script>
+    document.querySelectorAll('.tracks audio').forEach(player => {
+      player.volume = 0.5;
+    });
+  ${createSpaceBackgroundScript()}
+<\/script>
 </html>`;
