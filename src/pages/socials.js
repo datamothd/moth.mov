@@ -37,8 +37,8 @@ ${socialsStyles}
         preload="auto"
         crossorigin="anonymous"
       ></audio>
-      <div class="song-title" role="img" aria-label="Current song">
-        <div class="song-title-scroll" aria-hidden="true"><span></span><span></span></div>
+      <div class="song-title" role="group" aria-label="Current song">
+        <div class="song-title-scroll"><span></span><span></span></div>
       </div>
     </div>
     <main>

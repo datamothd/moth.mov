@@ -109,6 +109,14 @@ export const socialsStyles = `
       flex-shrink: 0;
       transform: scaleY(1.6);
     }
+    .song-title-scroll a {
+      color: inherit;
+      text-decoration: none;
+    }
+    .song-title-scroll a:hover,
+    .song-title-scroll a:focus-visible {
+      text-decoration: underline;
+    }
     .audio-visualizer {
       position: absolute;
       bottom: calc(100% + var(--audio-visualizer-gap));

@@ -21,11 +21,31 @@ ${audioVisualizerScript}
       const scrollingLabel = label + '    ';
       songTitle.setAttribute('aria-label', label);
       songTitle.title = label;
-      for (const copy of scroll.children) copy.textContent = scrollingLabel;
+      for (const [index, copy] of Array.from(scroll.children).entries()) {
+        const link = document.createElement('a');
+        link.href = '${musicOrigin}';
+        link.textContent = '${new URL(musicOrigin).hostname}';
+        if (index > 0) {
+          link.tabIndex = -1;
+          copy.setAttribute('aria-hidden', 'true');
+        }
+        copy.replaceChildren(link, document.createTextNode(' / ' + track.label + '    '));
+      }
       let characterOffset = 0;
+      let pointerDown = false;
+
+      songTitle.addEventListener('pointerdown', () => { pointerDown = true; });
+      window.addEventListener('pointerup', () => { pointerDown = false; });
+      window.addEventListener('pointercancel', () => { pointerDown = false; });
+      songTitle.addEventListener('focusin', event => {
+        if (!event.target.matches('a:focus-visible')) return;
+        characterOffset = 0;
+        scroll.style.transform = 'translateX(0)';
+      });
 
       function advanceSongTitle() {
-        if (document.hidden || player.paused) return;
+        if (document.hidden || player.paused || pointerDown ||
+            songTitle.matches(':hover') || songTitle.querySelector('a:focus-visible')) return;
         characterOffset = (characterOffset + 1) % scrollingLabel.length;
         const characterWidth = scroll.children[0].getBoundingClientRect().width / scrollingLabel.length;
         scroll.style.transform = 'translateX(-' + characterOffset * characterWidth + 'px)';
