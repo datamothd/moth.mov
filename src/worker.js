@@ -31,6 +31,6 @@ export default {
       return Response.redirect(`${origin}/`, 302);
     }
     const page = hostname === "moth.mov" ? pages.get(pathname) ?? homePage : homePage;
-    return new Response(page, { headers: htmlHeaders });
+    return new Response(typeof page === "function" ? page() : page, { headers: htmlHeaders });
   }
 };

@@ -4,7 +4,7 @@ import { socialsStyles } from '../styles/socials.js';
 import { socialsScript } from '../scripts/socials.js';
 import { passportDexIcon, tiktokIcon, discordIcon } from '../icons.js';
 
-export const socialsPage = `<!doctype html>
+export const socialsPage = () => `<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
@@ -48,7 +48,7 @@ ${socialsStyles}
           <div class="avatar-wrap">
             <img
               class="avatar"
-              src="https://r2.guns.lol/b9ed69aa-58da-4422-b0ec-71de1e83fde8.webp"
+              src="https://pub-26ba83ba9ebe46bfac80c6a9784e2bda.r2.dev/profile.webp?v=${Date.now()}"
               alt="Kirby avatar"
               referrerpolicy="no-referrer"
             >
