@@ -17,7 +17,7 @@ export const sharedStyles = `
       --navigation-icon-size: 18px;
       --navigation-hover-x: 3px;
       --navigation-hover-y: -3px;
-      --navigation-duration: 450ms;
+      --navigation-duration: 225ms;
       --navigation-layer: 1;
       --focus-width: 2px;
       --focus-offset: 4px;
@@ -56,7 +56,7 @@ export const sharedStyles = `
       backdrop-filter: blur(10px);
       transition:
         color var(--navigation-duration) ease,
-        background var(--navigation-duration) ease,
+        background-color var(--navigation-duration) ease,
         border-color var(--navigation-duration) ease,
         box-shadow var(--navigation-duration) ease;
     }
@@ -67,10 +67,7 @@ export const sharedStyles = `
       pointer-events: none;
       background: radial-gradient(circle at 32% 72%, rgba(139, 112, 238, 0.3), transparent 55%);
       opacity: 0;
-      transform: translate(-12%, 12%);
-      transition:
-        opacity var(--navigation-duration) ease,
-        transform var(--navigation-duration) ease;
+      transition: opacity var(--navigation-duration) ease;
     }
     .navigation-link svg,
     .navigation-link span {
@@ -95,7 +92,6 @@ export const sharedStyles = `
     .navigation-link:hover::before,
     .navigation-link:focus-visible::before {
       opacity: 1;
-      transform: translate(0, 0);
     }
     .navigation-link:hover svg,
     .navigation-link:focus-visible svg {
@@ -138,9 +134,10 @@ export const sharedStyles = `
     }
 
     @media (prefers-reduced-motion: reduce) {
-      .navigation-link,
-      .navigation-link::before,
-      .navigation-link svg {
+      .navigation-link svg,
+      .navigation-link:hover svg,
+      .navigation-link:focus-visible svg {
+        transform: none;
         transition: none;
       }
     }
