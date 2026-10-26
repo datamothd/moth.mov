@@ -1,6 +1,7 @@
 import { spaceBackgroundMarkup, spaceBackgroundStyles } from '../components/space-background.js';
 import { sharedStyles } from '../styles/shared.js';
 import { socialsStyles } from '../styles/socials.js';
+import { highlight, shadow } from '../styles/socials-theme.js';
 import { socialsScript } from '../scripts/socials.js';
 import { passportDexIcon, tiktokIcon, discordIcon } from '../icons.js';
 
@@ -9,7 +10,7 @@ export const socialsPage = () => `<!doctype html>
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#000000">
+  <meta name="theme-color" content="${shadow}">
   <meta name="description" content="Find Kirby around the internet.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -25,6 +26,14 @@ ${socialsStyles}
   </style>
 </head>
 <body>
+  <svg width="0" height="0" style="position: absolute" aria-hidden="true" focusable="false">
+    <defs>
+      <filter id="social-tint" color-interpolation-filters="sRGB">
+        <feFlood flood-color="${highlight}" />
+        <feComposite in2="SourceAlpha" operator="in" />
+      </filter>
+    </defs>
+  </svg>
   ${spaceBackgroundMarkup}
   <div class="glow" aria-hidden="true"></div>
   <div class="shell">

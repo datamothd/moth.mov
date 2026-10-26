@@ -1,5 +1,13 @@
+import { highlight, muted, shadow, accent } from './socials-theme.js';
+
 export const socialsStyles = `
     :root {
+      --highlight: ${highlight};
+      --muted: ${muted};
+      --shadow: ${shadow};
+      --accent: ${accent};
+      --background: color-mix(in srgb, var(--shadow) 12%, #000);
+      --text: color-mix(in srgb, var(--highlight) 22%, #fff);
       --main-padding: calc(var(--page-edge-bottom) + var(--navigation-height) + 20px);
       --audio-visualizer-height: clamp(24px, 6dvh, 72px);
       --audio-visualizer-gap: 12px;
@@ -22,24 +30,24 @@ export const socialsStyles = `
     }
     html {
       min-height: 100%;
-      background: #000000;
+      background: var(--background);
     }
     body {
       min-height: 100dvh;
       margin: 0;
       overflow-x: hidden;
-      color: #f1f1ff;
+      color: var(--text);
       font-family: var(--font-family);
-      background: #000000;
+      background: var(--background);
     }
     .glow {
       position: fixed;
       inset: -25%;
       pointer-events: none;
       background:
-        radial-gradient(ellipse 31% 45% at 29% 25%, rgba(255, 255, 255, 0.08), transparent 78%),
-        radial-gradient(ellipse 37% 30% at 70% 62%, rgba(255, 255, 255, 0.095), transparent 80%),
-        radial-gradient(ellipse 24% 36% at 84% 18%, rgba(255, 255, 255, 0.04), transparent 80%);
+        radial-gradient(ellipse 31% 45% at 29% 25%, color-mix(in srgb, var(--accent) 22%, transparent), transparent 78%),
+        radial-gradient(ellipse 37% 30% at 70% 62%, color-mix(in srgb, var(--shadow) 38%, transparent), transparent 80%),
+        radial-gradient(ellipse 24% 36% at 84% 18%, color-mix(in srgb, var(--muted) 15%, transparent), transparent 80%);
       filter: blur(70px);
     }
     .shell {
@@ -55,10 +63,25 @@ export const socialsStyles = `
       --navigation-hover-x: -3px;
       --navigation-hover-y: 0;
       --navigation-layer: 5;
+      color: var(--highlight);
+      border-color: color-mix(in srgb, var(--muted) 55%, transparent);
+      background: color-mix(in srgb, var(--shadow) 30%, transparent);
+    }
+    .back::before {
+      background: radial-gradient(circle at 32% 72%, color-mix(in srgb, var(--accent) 30%, transparent), transparent 55%);
+    }
+    .back:hover,
+    .back:focus-visible {
+      color: var(--text);
+      background: color-mix(in srgb, var(--shadow) 65%, transparent);
+      border-color: var(--highlight);
+      box-shadow: 0 0 24px color-mix(in srgb, var(--accent) 18%, transparent);
+      outline-color: var(--highlight);
     }
     .signature,
     .path {
       z-index: 4;
+      color: var(--highlight);
     }
     .music-widget {
       position: fixed;
@@ -82,14 +105,12 @@ export const socialsStyles = `
       position: relative;
       padding: 7px 0;
       overflow: hidden;
-      color: #ffffff;
+      color: var(--text);
       font: 12px/20px 'Courier New', monospace;
       letter-spacing: -0.7px;
       text-shadow:
-        -0.6px 0 rgba(255, 255, 255, 0.75),
-        0.8px 0.4px rgba(255, 255, 255, 0.55),
-        0 0 4px rgba(255, 255, 255, 0.40),
-        0 0 12px rgba(255, 255, 255, 0.35);
+        0 0 4px color-mix(in srgb, var(--highlight) 40%, transparent),
+        0 0 12px color-mix(in srgb, var(--accent) 35%, transparent);
     }
     .song-title::after {
       content: '';
@@ -166,7 +187,7 @@ export const socialsStyles = `
       padding: 12px 0;
       border: 0;
       background: transparent;
-      color: #ffffff;
+      color: var(--highlight);
       font-family: var(--font-family);
       font-size: clamp(22px, 3vw, 34px);
       font-weight: 600;
@@ -174,7 +195,7 @@ export const socialsStyles = `
       letter-spacing: 0.045em;
       cursor: pointer;
       text-align: center;
-      text-shadow: 0 0 24px rgba(255, 255, 255, 0.25);
+      text-shadow: 0 0 24px color-mix(in srgb, var(--accent) 40%, transparent);
       opacity: 1;
       visibility: visible;
       transition:
@@ -182,7 +203,7 @@ export const socialsStyles = `
         visibility 0ms linear var(--entry-fade-duration);
     }
     .entry-prompt:focus-visible {
-      outline: var(--focus-width) solid #ffffff;
+      outline: var(--focus-width) solid var(--highlight);
       outline-offset: 6px;
       border-radius: 8px;
     }
@@ -225,17 +246,18 @@ export const socialsStyles = `
       align-items: center;
       gap: var(--profile-gap);
       padding: var(--profile-padding);
-      border: var(--border-width) solid rgba(255, 255, 255, 0.16);
+      border: var(--border-width) solid color-mix(in srgb, var(--highlight) 32%, transparent);
       border-radius: var(--profile-radius);
       background: linear-gradient(
         145deg,
-        rgba(255, 255, 255, 0.075),
-        rgba(255, 255, 255, 0.027) 58%,
-        rgba(255, 255, 255, 0.045)
+        color-mix(in srgb, var(--muted) 22%, transparent),
+        color-mix(in srgb, var(--shadow) 18%, transparent) 58%,
+        color-mix(in srgb, var(--accent) 12%, transparent)
       );
       box-shadow:
         0 26px 80px rgba(0, 0, 0, 0.4),
-        inset 0 1px 0 rgba(255, 255, 255, 0.09);
+        0 0 60px color-mix(in srgb, var(--shadow) 24%, transparent),
+        inset 0 1px 0 color-mix(in srgb, var(--highlight) 18%, transparent);
       backdrop-filter: blur(18px);
     }
     .avatar-wrap {
@@ -244,10 +266,10 @@ export const socialsStyles = `
       aspect-ratio: 1;
       padding: var(--avatar-frame-padding);
       border-radius: var(--profile-radius);
-      border: var(--border-width) solid rgba(255, 255, 255, 0.3);
-      background: rgba(255, 255, 255, 0.06);
+      border: var(--border-width) solid color-mix(in srgb, var(--highlight) 55%, transparent);
+      background: color-mix(in srgb, var(--muted) 22%, transparent);
       box-shadow:
-        0 0 68px rgba(255, 255, 255, 0.08),
+        0 0 68px color-mix(in srgb, var(--accent) 16%, transparent),
         0 27px 105px rgba(0, 0, 0, 0.34);
     }
     .avatar {
@@ -256,7 +278,7 @@ export const socialsStyles = `
       height: 100%;
       object-fit: cover;
       border-radius: calc(var(--profile-radius) - var(--avatar-frame-padding) - var(--border-width));
-      background: #181629;
+      background: var(--shadow);
     }
     .details {
       min-width: 0;
@@ -267,7 +289,7 @@ export const socialsStyles = `
       padding-inline-end: 0.065em;
       /* Align Manrope's leading glyph bearing independently of tracking. */
       text-indent: -0.05em;
-      color: #ffffff;
+      color: var(--highlight);
       font-size: var(--heading-font-size);
       line-height: 1.1;
       letter-spacing: -0.065em;
@@ -275,7 +297,7 @@ export const socialsStyles = `
     }
     .handle {
       margin: var(--handle-margin-top) 0 var(--handle-margin-bottom);
-      color: #ffffff;
+      color: var(--highlight);
       font-size: var(--handle-font-size);
       letter-spacing: var(--footer-letter-spacing);
     }
@@ -290,19 +312,20 @@ export const socialsStyles = `
       place-items: center;
       width: var(--social-width);
       height: var(--social-height);
-      color: #ffffff;
+      color: var(--highlight);
       text-decoration: none;
     }
     .social:focus-visible {
-      outline: var(--focus-width) solid #ffffff;
+      outline: var(--focus-width) solid var(--highlight);
       outline-offset: var(--focus-offset);
     }
     .social img {
       width: var(--social-icon-size);
       height: var(--social-icon-size);
       filter:
-        drop-shadow(0 0 5px rgba(255, 255, 255, 0.85))
-        drop-shadow(0 0 13px rgba(255, 255, 255, 0.45));
+        url(#social-tint)
+        drop-shadow(0 0 4px color-mix(in srgb, var(--muted) 40%, transparent))
+        drop-shadow(0 0 10px color-mix(in srgb, var(--accent) 22%, transparent));
       translate: 0 var(--social-icon-offset-y);
       scale: var(--social-icon-scale);
       transition: scale 450ms cubic-bezier(0.22, 0.75, 0.2, 1);

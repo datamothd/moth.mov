@@ -2,6 +2,5 @@ Repository for my personal website which includes a few projects. Deployed at ht
 
 ## Planned Features:
 - Site map
-- Directory viewer for music.moth.mov subdomain
 - Ratings page
 - Projects page

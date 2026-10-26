@@ -1,5 +1,5 @@
 export const audioVisualizerScript = `
-function setupAudioVisualizer(player) {
+function setupAudioVisualizer(player, color = 'rgba(235, 240, 255, 0.72)') {
   const canvas = document.querySelector('.audio-visualizer');
   const drawing = canvas?.getContext('2d');
   const AudioContextClass = window.AudioContext || window.webkitAudioContext;
@@ -41,7 +41,7 @@ function setupAudioVisualizer(player) {
       && !player.paused && !player.ended && !player.seeking && player.readyState >= 3;
     if (playing) analyser.getFloatFrequencyData(frequencies);
     drawing.clearRect(0, 0, width, height);
-    drawing.fillStyle = 'rgba(235, 240, 255, 0.72)';
+    drawing.fillStyle = color;
     const spacing = width / barCount;
     const barWidth = Math.max(1, spacing * 0.65);
     const binHz = audioContext ? audioContext.sampleRate / analyser.fftSize : 1;

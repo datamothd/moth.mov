@@ -1,12 +1,15 @@
 import { audioVisualizerScript } from './audio-visualizer.js';
 import { musicOrigin, tracks } from '../data/music.js';
 import { createSpaceBackgroundScript } from './space.js';
+import { highlight } from '../styles/socials-theme.js';
+
+const starTint = highlight.match(/\w{2}/g).map(channel => parseInt(channel, 16)).join(', ');
 
 export const socialsScript = `
 ${audioVisualizerScript}
     (() => {
       const player = document.querySelector('.music-player');
-      const startVisualizer = setupAudioVisualizer(player);
+      const startVisualizer = setupAudioVisualizer(player, '${highlight}');
       const profile = document.querySelector('.profile');
       const prompt = document.querySelector('.entry-prompt');
       const tracks = ${JSON.stringify(tracks).replace(/</g, '\\u003c')};
@@ -68,5 +71,5 @@ ${audioVisualizerScript}
       document.addEventListener('click', enter);
     })();
 
-${createSpaceBackgroundScript()}
+${createSpaceBackgroundScript('socials', { starTint })}
 `;
