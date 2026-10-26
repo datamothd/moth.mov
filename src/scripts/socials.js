@@ -1,9 +1,10 @@
 import { audioVisualizerScript } from './audio-visualizer.js';
 import { musicOrigin, tracks } from '../data/music.js';
 import { createSpaceBackgroundScript } from './space.js';
-import { highlight } from '../styles/socials-theme.js';
+import { highlight, accent } from '../styles/socials-theme.js';
 
-const starTint = highlight.match(/\w{2}/g).map(channel => parseInt(channel, 16)).join(', ');
+const toRgb = color => color.match(/\w{2}/g).map(channel => parseInt(channel, 16)).join(', ');
+const starTint = toRgb(highlight);
 
 export const socialsScript = `
 ${audioVisualizerScript}
@@ -71,5 +72,5 @@ ${audioVisualizerScript}
       document.addEventListener('click', enter);
     })();
 
-${createSpaceBackgroundScript('socials', { starTint })}
+${createSpaceBackgroundScript('socials', { starTint, meteorTint: starTint, meteorTrailTint: toRgb(accent) })}
 `;

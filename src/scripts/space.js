@@ -39,6 +39,8 @@ const defaults = {
   meteorDesktopStrokePx: 2,
   meteorRadiusPx: 2.3,
   meteorShadowPx: 8,
+  meteorTint: '255, 255, 255',
+  meteorTrailTint: '235, 240, 255',
   blueMeteors: false,
 };
 
@@ -210,15 +212,15 @@ function setupSpaceBackground(canvas, animation) {
         context.strokeStyle = 'rgba(211, 229, 255, ' + fade * 0.72 + ')';
       } else {
         const trail = context.createLinearGradient(tailXPx, tailYPx, meteor.xPx, meteor.yPx);
-        trail.addColorStop(0, animation.blueMeteors ? 'rgba(163, 196, 255, 0)' : 'rgba(255, 255, 255, 0)');
+        trail.addColorStop(0, animation.blueMeteors ? 'rgba(163, 196, 255, 0)' : 'rgba(' + animation.meteorTrailTint + ', 0)');
         trail.addColorStop(animation.blueMeteors ? 0.7 : 0.75, animation.blueMeteors
           ? 'rgba(183, 212, 255, ' + fade * 0.45 + ')'
-          : 'rgba(235, 240, 255, ' + fade * 0.58 + ')');
-        trail.addColorStop(1, 'rgba(255, 255, 255, ' + fade + ')');
+          : 'rgba(' + animation.meteorTrailTint + ', ' + fade * 0.58 + ')');
+        trail.addColorStop(1, 'rgba(' + animation.meteorTint + ', ' + fade + ')');
         context.strokeStyle = trail;
         context.shadowColor = animation.blueMeteors
           ? 'rgba(173, 211, 255, ' + fade + ')'
-          : 'rgba(255, 255, 255, ' + fade * 0.7 + ')';
+          : 'rgba(' + animation.meteorTint + ', ' + fade * 0.7 + ')';
         context.shadowBlur = animation.meteorShadowPx;
       }
 
@@ -226,7 +228,7 @@ function setupSpaceBackground(canvas, animation) {
       context.moveTo(tailXPx, tailYPx);
       context.lineTo(meteor.xPx, meteor.yPx);
       context.stroke();
-      context.fillStyle = 'rgba(255, 255, 255, ' + fade + ')';
+      context.fillStyle = 'rgba(' + animation.meteorTint + ', ' + fade + ')';
       context.beginPath();
       context.arc(meteor.xPx, meteor.yPx, animation.meteorRadiusPx, 0, Math.PI * 2);
       context.fill();
