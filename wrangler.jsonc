@@ -4,6 +4,12 @@
   "workers_dev": true,
   "preview_urls": false,
   "compatibility_date": "2026-09-26",
+  "r2_buckets": [
+    {
+      "binding": "MUSIC_BUCKET",
+      "bucket_name": "music"
+    }
+  ],
   "routes": [
     {
       "pattern": "moth.mov",

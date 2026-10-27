@@ -17,12 +17,12 @@ const subdomains = new Map([
   ["music.moth.mov", musicPage]
 ]);
 export default {
-  async fetch(request) {
+  async fetch(request, env) {
     const { hostname, pathname, origin } = new URL(request.url);
     const subdomainPage = subdomains.get(hostname);
     if (subdomainPage) {
       return pathname === "/"
-        ? new Response(subdomainPage(await loadTracks()), { headers: htmlHeaders })
+        ? new Response(subdomainPage(await loadTracks(env)), { headers: htmlHeaders })
         : fetch(request);
     }
     if (hostname === "moth.mov" && socialsAliases.has(pathname)) {
@@ -32,6 +32,6 @@ export default {
       return Response.redirect(`${origin}/`, 302);
     }
     const page = hostname === "moth.mov" ? pages.get(pathname) ?? homePage : homePage;
-    return new Response(typeof page === "function" ? page(await loadTracks()) : page, { headers: htmlHeaders });
+    return new Response(typeof page === "function" ? page(await loadTracks(env)) : page, { headers: htmlHeaders });
   }
 };

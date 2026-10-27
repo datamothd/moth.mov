@@ -12,16 +12,12 @@ const prepareTracks = entries => entries.map(track => ({
 
 export const tracks = prepareTracks(fallbackTracks);
 
-export async function loadTracks() {
+export async function loadTracks(env) {
   try {
-    const response = await fetch(`${musicOrigin}/tracks.json`, {
-      cache: 'no-store',
-      cf: { cacheTtl: 0 },
-      signal: AbortSignal.timeout(3000),
-    });
-    if (!response.ok) throw new Error(`Music list returned ${response.status}`);
-
-    const entries = await response.json();
+    if (!env?.MUSIC_BUCKET) throw new Error('MUSIC_BUCKET R2 binding is missing');
+    const object = await env.MUSIC_BUCKET.get('tracks.json');
+    if (!object) throw new Error('tracks.json is missing from the music bucket');
+    const entries = await object.json();
     if (!Array.isArray(entries) || entries.length === 0 || entries.some(track =>
       !track || ['artist', 'title', 'fileName'].some(key =>
         typeof track[key] !== 'string' || !track[key].trim()
