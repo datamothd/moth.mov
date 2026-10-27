@@ -5,7 +5,7 @@ import { highlight, shadow } from '../styles/socials-theme.js';
 import { socialsScript } from '../scripts/socials.js';
 import { passportDexIcon, tiktokIcon, discordIcon } from '../icons.js';
 
-export const socialsPage = () => `<!doctype html>
+export const socialsPage = tracks => `<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
@@ -118,6 +118,6 @@ ${socialsStyles}
     <p class="path">/ kirby</p>
     <p class="signature">moth.mov</p>
   </div>
-  <script>${socialsScript}<\/script>
+  <script>${socialsScript(tracks)}<\/script>
 </body>
 </html>`;

@@ -1,4 +1,4 @@
-import { tracks } from '../data/music.js';
+import { tracks as fallbackTracks } from '../data/music.js';
 import { musicStyles } from '../styles/music.js';
 import {
   spaceBackgroundMarkup,
@@ -15,7 +15,7 @@ const escapeHtml = value => value.replace(/[&<>"']/g, character => ({
   "'": '&#39;',
 })[character]);
 
-const trackList = tracks.map(track => `
+const trackList = tracks => tracks.map(track => `
       <li>
         <p>${escapeHtml(track.label)}</p>
         <audio
@@ -27,7 +27,7 @@ const trackList = tracks.map(track => `
         ></audio>
       </li>`).join('');
 
-export const musicPage = `<!doctype html>
+export const musicPage = (tracks = fallbackTracks) => `<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
@@ -50,7 +50,7 @@ ${sharedStyles}
   ${spaceBackgroundMarkup}
   <main>
     <h1>music</h1>
-    <ul class="tracks">${trackList}
+    <ul class="tracks">${trackList(tracks)}
     </ul>
     <p class="signature">music.moth.mov</p>
     <a class="navigation-link back" href="https://moth.mov/" aria-label="Back to moth.mov">

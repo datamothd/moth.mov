@@ -2,6 +2,7 @@ import { homePage } from './pages/home.js';
 import { socialsPage } from './pages/socials.js';
 import { ratingsPage } from './pages/ratings.js';
 import { musicPage } from './pages/music.js';
+import { loadTracks } from './data/music.js';
 
 const htmlHeaders = {
   "content-type": "text/html; charset=UTF-8",
@@ -16,12 +17,12 @@ const subdomains = new Map([
   ["music.moth.mov", musicPage]
 ]);
 export default {
-  fetch(request) {
+  async fetch(request) {
     const { hostname, pathname, origin } = new URL(request.url);
     const subdomainPage = subdomains.get(hostname);
     if (subdomainPage) {
       return pathname === "/"
-        ? new Response(subdomainPage, { headers: htmlHeaders })
+        ? new Response(subdomainPage(await loadTracks()), { headers: htmlHeaders })
         : fetch(request);
     }
     if (hostname === "moth.mov" && socialsAliases.has(pathname)) {
@@ -31,6 +32,6 @@ export default {
       return Response.redirect(`${origin}/`, 302);
     }
     const page = hostname === "moth.mov" ? pages.get(pathname) ?? homePage : homePage;
-    return new Response(typeof page === "function" ? page() : page, { headers: htmlHeaders });
+    return new Response(typeof page === "function" ? page(await loadTracks()) : page, { headers: htmlHeaders });
   }
 };
