@@ -420,6 +420,7 @@ export const socialsStyles = `
         min-height: 0;
         flex-direction: column;
         padding-bottom: 0;
+        backdrop-filter: blur(3px);
       }
       .avatar-wrap {
         contain: size;

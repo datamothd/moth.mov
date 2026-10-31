@@ -21,6 +21,7 @@ const defaults = {
   blueStarChance: 0,
   replaceMeteors: false,
   maxMeteors: 5,
+  mobileMeteorCount: 3,
   meteorDurationMinMs: 2500,
   meteorDurationMaxMs: 3167,
   meteorLengthMinPx: 150,
@@ -103,6 +104,8 @@ function setupSpaceBackground(canvas, animation) {
   function resize() {
     cancelAnimationFrame(frame);
     frame = 0;
+    const previousWidthPx = widthPx;
+    const previousHeightPx = heightPx;
     widthPx = window.innerWidth;
     heightPx = window.innerHeight;
     const resizeTimeMs = performance.now();
@@ -125,21 +128,34 @@ function setupSpaceBackground(canvas, animation) {
       hideUntilMs: 0,
       tint: Math.random() < animation.blueStarChance ? '190, 210, 255' : animation.starTint,
     }));
-    if (!animation.replaceMeteors) {
-      meteors = [];
-      nextMeteorMs = 0;
+    if (previousWidthPx && previousHeightPx) {
+      for (const meteor of meteors) {
+        meteor.xPx *= widthPx / previousWidthPx;
+        meteor.yPx *= heightPx / previousHeightPx;
+      }
     }
     wake();
   }
 
-  function spawnMeteor() {
+  function meteorVelocityScale(durationMs) {
+    return widthPx < animation.mobileBreakpointPx
+      ? Math.min(1, widthPx / (Math.abs(animation.meteorVelocityXPxPerMs) * durationMs))
+      : 1;
+  }
+
+  function spawnMeteor(progress = 0) {
     if (meteors.length >= animation.maxMeteors) return;
+    const durationMs = randomBetween(animation.meteorDurationMinMs, animation.meteorDurationMaxMs);
+    const ageMs = progress * durationMs;
+    const velocityScale = meteorVelocityScale(durationMs);
     meteors.push({
-      xPx: randomBetween(widthPx * animation.meteorStartXMin, widthPx * animation.meteorStartXMax),
-      yPx: randomBetween(heightPx * animation.meteorStartYMin, heightPx * animation.meteorStartYMax),
+      xPx: randomBetween(widthPx * animation.meteorStartXMin, widthPx * animation.meteorStartXMax)
+        + animation.meteorVelocityXPxPerMs * velocityScale * ageMs,
+      yPx: randomBetween(heightPx * animation.meteorStartYMin, heightPx * animation.meteorStartYMax)
+        + animation.meteorVelocityYPxPerMs * velocityScale * ageMs,
       lengthPx: randomBetween(animation.meteorLengthMinPx, animation.meteorLengthMaxPx),
-      ageMs: 0,
-      durationMs: randomBetween(animation.meteorDurationMinMs, animation.meteorDurationMaxMs),
+      ageMs,
+      durationMs,
     });
   }
 
@@ -149,6 +165,8 @@ function setupSpaceBackground(canvas, animation) {
       ? animation.frameDurationMs
       : Math.min(timeMs - lastTimeMs, animation.maxElapsedMs);
     lastTimeMs = timeMs;
+    const mobile = widthPx < animation.mobileBreakpointPx;
+    const replaceMeteors = mobile || animation.replaceMeteors;
     context.clearRect(0, 0, widthPx, heightPx);
 
     for (const star of stars) {
@@ -174,17 +192,22 @@ function setupSpaceBackground(canvas, animation) {
       const progress = meteor.ageMs / meteor.durationMs;
       const withinBounds = meteor.xPx > -meteor.lengthPx && meteor.xPx < widthPx + meteor.lengthPx
         && meteor.yPx > -meteor.lengthPx && meteor.yPx < heightPx + meteor.lengthPx;
-      const visible = progress < 1 && (!animation.replaceMeteors || progress < 0.5 || withinBounds);
-      if (!visible && animation.replaceMeteors) {
-        pendingMeteorTimesMs.push(timeMs + randomBetween(animation.meteorDelayMinMs, animation.meteorDelayMaxMs));
+      const visible = progress < 1 && (!replaceMeteors || progress < 0.5 || withinBounds);
+      if (!visible && replaceMeteors) {
+        pendingMeteorTimesMs.push(timeMs + (mobile ? 0
+          : randomBetween(animation.meteorDelayMinMs, animation.meteorDelayMaxMs)));
       }
       return visible;
     });
 
-    if (animation.replaceMeteors) {
-      if (!hasSeeded) {
-        const initialCount = 1 + Math.floor(randomBetween(0, 3));
-        for (let index = 0; index < initialCount; index++) spawnMeteor();
+    if (replaceMeteors) {
+      if (!hasSeeded || mobile) {
+        const initialCount = mobile
+          ? Math.max(0, Math.min(animation.mobileMeteorCount, animation.maxMeteors) - meteors.length - pendingMeteorTimesMs.length)
+          : 1 + Math.floor(randomBetween(0, 3));
+        for (let index = 0; index < initialCount; index++) {
+          spawnMeteor(mobile ? index / initialCount : 0);
+        }
         hasSeeded = true;
       }
       pendingMeteorTimesMs = pendingMeteorTimesMs.filter(spawnAtMs => {
@@ -199,30 +222,27 @@ function setupSpaceBackground(canvas, animation) {
     }
 
     for (const meteor of meteors) {
-      meteor.xPx += animation.meteorVelocityXPxPerMs * elapsedMs;
-      meteor.yPx += animation.meteorVelocityYPxPerMs * elapsedMs;
+      const velocityScale = meteorVelocityScale(meteor.durationMs);
+      meteor.xPx += animation.meteorVelocityXPxPerMs * velocityScale * elapsedMs;
+      meteor.yPx += animation.meteorVelocityYPxPerMs * velocityScale * elapsedMs;
       meteor.ageMs += elapsedMs;
       const fade = Math.max(0, Math.sin(meteor.ageMs / meteor.durationMs * Math.PI));
-      const tailXPx = meteor.xPx + meteor.lengthPx * animation.meteorTailXRatio;
-      const tailYPx = meteor.yPx - meteor.lengthPx * animation.meteorTailYRatio;
-      const mobile = widthPx < animation.mobileBreakpointPx;
+      const lengthPx = mobile ? Math.min(meteor.lengthPx, widthPx * 0.4) : meteor.lengthPx;
+      const tailXPx = meteor.xPx + lengthPx * animation.meteorTailXRatio;
+      const tailYPx = meteor.yPx - lengthPx * animation.meteorTailYRatio;
       context.lineWidth = mobile ? animation.meteorMobileStrokePx : animation.meteorDesktopStrokePx;
 
-      if (mobile && animation.blueMeteors) {
-        context.strokeStyle = 'rgba(211, 229, 255, ' + fade * 0.72 + ')';
-      } else {
-        const trail = context.createLinearGradient(tailXPx, tailYPx, meteor.xPx, meteor.yPx);
-        trail.addColorStop(0, animation.blueMeteors ? 'rgba(163, 196, 255, 0)' : 'rgba(' + animation.meteorTrailTint + ', 0)');
-        trail.addColorStop(animation.blueMeteors ? 0.7 : 0.75, animation.blueMeteors
-          ? 'rgba(183, 212, 255, ' + fade * 0.45 + ')'
-          : 'rgba(' + animation.meteorTrailTint + ', ' + fade * 0.58 + ')');
-        trail.addColorStop(1, 'rgba(' + animation.meteorTint + ', ' + fade + ')');
-        context.strokeStyle = trail;
-        context.shadowColor = animation.blueMeteors
-          ? 'rgba(173, 211, 255, ' + fade + ')'
-          : 'rgba(' + animation.meteorTint + ', ' + fade * 0.7 + ')';
-        context.shadowBlur = animation.meteorShadowPx;
-      }
+      const trail = context.createLinearGradient(tailXPx, tailYPx, meteor.xPx, meteor.yPx);
+      trail.addColorStop(0, animation.blueMeteors ? 'rgba(163, 196, 255, 0)' : 'rgba(' + animation.meteorTrailTint + ', 0)');
+      trail.addColorStop(animation.blueMeteors ? 0.7 : 0.75, animation.blueMeteors
+        ? 'rgba(183, 212, 255, ' + fade * 0.45 + ')'
+        : 'rgba(' + animation.meteorTrailTint + ', ' + fade * 0.58 + ')');
+      trail.addColorStop(1, 'rgba(' + animation.meteorTint + ', ' + fade + ')');
+      context.strokeStyle = trail;
+      context.shadowColor = animation.blueMeteors
+        ? 'rgba(173, 211, 255, ' + fade + ')'
+        : 'rgba(' + animation.meteorTint + ', ' + fade * 0.7 + ')';
+      context.shadowBlur = mobile ? 0 : animation.meteorShadowPx;
 
       context.beginPath();
       context.moveTo(tailXPx, tailYPx);
