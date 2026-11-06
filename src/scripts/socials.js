@@ -41,6 +41,7 @@ ${audioVisualizerScript}
       const artwork = document.querySelector('.music-artwork');
       const cover = document.querySelector('.music-cover');
       let artworkRequest;
+      let seekTime = null;
       function syncArtwork(currentTrack) {
         artworkRequest = null;
         cover.hidden = true;
@@ -75,16 +76,15 @@ ${audioVisualizerScript}
       }
 
       function syncProgress() {
-        const duration = Number.isFinite(player.duration) ? player.duration : 0;
+        const duration = Number.isFinite(player.duration) ? Math.max(0, player.duration) : 0;
+        const position = Math.min(duration, Math.max(0, seekTime ?? player.currentTime));
+        const elapsed = formatTime(position);
+        const total = formatTime(duration);
         seek.disabled = duration <= 0;
         seek.max = duration;
-        seek.value = player.currentTime;
-        seek.style.setProperty('--progress', (duration > 0 ? Math.min(100, Math.max(0, player.currentTime / duration * 100)) : 0) + '%');
-        seek.setAttribute('aria-valuetext', formatTime(player.currentTime) + ' of ' + formatTime(duration));
-        const totalSeconds = Math.ceil(duration);
-        const elapsedSeconds = Math.min(totalSeconds, Math.floor(player.currentTime));
-        const elapsed = formatTime(elapsedSeconds);
-        const total = formatTime(totalSeconds);
+        seek.value = position;
+        seek.style.setProperty('--progress', (duration > 0 ? position / duration * 100 : 0) + '%');
+        seek.setAttribute('aria-valuetext', elapsed + ' of ' + total);
         time.textContent = elapsed + ' / ' + total;
         time.setAttribute('aria-label', elapsed + ' elapsed, ' + total + ' total');
       }
@@ -102,6 +102,7 @@ ${audioVisualizerScript}
         const wasPlaying = !player.paused;
         trackIndex = (trackIndex + offset + tracks.length) % tracks.length;
         const next = tracks[trackIndex];
+        seekTime = null;
         player.src = next.url;
         title.textContent = title.title = next.title;
         artist.textContent = artist.title = next.artist;
@@ -118,7 +119,12 @@ ${audioVisualizerScript}
         else player.pause();
       });
       seek.addEventListener('input', () => {
-        player.currentTime = Number(seek.value);
+        seekTime = Number(seek.value);
+        syncProgress();
+      });
+      seek.addEventListener('change', () => {
+        if (!seek.disabled) player.currentTime = Number(seek.value);
+        seekTime = null;
         syncProgress();
       });
       volume.addEventListener('input', () => {
@@ -178,7 +184,7 @@ ${audioVisualizerScript}
         slider.addEventListener('lostpointercapture', endDrag);
       }
       for (const event of ['play', 'pause', 'ended']) player.addEventListener(event, syncPlayback);
-      for (const event of ['loadedmetadata', 'durationchange', 'timeupdate', 'emptied']) {
+      for (const event of ['loadedmetadata', 'durationchange', 'timeupdate', 'seeked', 'ended', 'emptied']) {
         player.addEventListener(event, syncProgress);
       }
       player.addEventListener('error', () => {

@@ -74,7 +74,7 @@ ${socialsStyles(theme)}
         </div>
         </div>
       <div class="music-footer">
-      <input class="music-seek" type="range" min="0" max="0" value="0" step="0.1" aria-label="Seek" disabled>
+      <input class="music-seek" type="range" min="0" max="0" value="0" step="any" aria-label="Seek" disabled>
         <span class="music-time">0:00 / 0:00</span>
       </div>
       <span class="music-status" role="status"></span>
