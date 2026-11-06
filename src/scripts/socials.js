@@ -10,6 +10,8 @@ export const socialsScript = (tracks = fallbackTracks, { highlight, accent } = g
 ${audioVisualizerScript}
     (() => {
       const player = document.querySelector('.music-player');
+      const nativePlayer = window.matchMedia('(max-width: 600px), (pointer: coarse)');
+      player.controls = nativePlayer.matches;
       const startVisualizer = setupAudioVisualizer(player, '${highlight}');
       const profile = document.querySelector('.profile');
       const prompt = document.querySelector('.entry-prompt');
@@ -17,7 +19,14 @@ ${audioVisualizerScript}
       let trackIndex = Math.floor(Math.random() * tracks.length);
       const track = tracks[trackIndex];
       player.src = track.url;
-      player.volume = 0.3;
+      let volumeLevel = nativePlayer.matches ? 1 : 0.3;
+      startVisualizer.setVolume(volumeLevel);
+      nativePlayer.addEventListener('change', () => {
+        player.controls = nativePlayer.matches;
+        volumeLevel = nativePlayer.matches ? 1 : 0.3;
+        startVisualizer.setVolume(volumeLevel);
+        syncVolume();
+      });
       player.loop = true;
       const widget = document.querySelector('.music-widget');
       const toggle = document.querySelector('.music-toggle');
@@ -89,23 +98,61 @@ ${audioVisualizerScript}
         syncProgress();
       });
       volume.addEventListener('input', () => {
-        player.volume = Number(volume.value);
+        volumeLevel = Number(volume.value);
+        startVisualizer.setVolume(volumeLevel);
         player.muted = false;
+        syncVolume();
       });
       mute.addEventListener('click', () => {
-        if (player.volume === 0) {
-          player.volume = 0.3;
+        if (volumeLevel === 0) {
+          volumeLevel = 0.3;
+          startVisualizer.setVolume(volumeLevel);
           player.muted = false;
         }
         else player.muted = !player.muted;
+        syncVolume();
       });
-      player.addEventListener('volumechange', () => {
-        volume.value = player.muted ? 0 : player.volume;
+      function syncVolume() {
+        volume.value = player.muted ? 0 : volumeLevel;
         volume.style.setProperty('--progress', Number(volume.value) * 100 + '%');
-        const silent = player.muted || player.volume === 0;
+        const silent = player.muted || volumeLevel === 0;
         mute.setAttribute('aria-label', silent ? 'Unmute' : 'Mute');
         mute.setAttribute('aria-pressed', String(silent));
-      });
+      }
+      player.addEventListener('volumechange', syncVolume);
+      for (const slider of [seek, volume]) {
+        let pointerId = null;
+        const updateSlider = event => {
+          const bounds = slider.getBoundingClientRect();
+          const thumb = window.matchMedia('(any-pointer: coarse)').matches ? 22 : 13;
+          const fraction = Math.min(1, Math.max(0, (event.clientX - bounds.left - thumb / 2) / Math.max(1, bounds.width - thumb)));
+          slider.value = Number(slider.min) + fraction * (Number(slider.max) - Number(slider.min));
+          slider.dispatchEvent(new Event('input', { bubbles: true }));
+        };
+        slider.addEventListener('pointerdown', event => {
+          if (event.pointerType === 'mouse' || slider.disabled || pointerId !== null) return;
+          event.preventDefault();
+          pointerId = event.pointerId;
+          slider.setPointerCapture(pointerId);
+          slider.focus({ preventScroll: true });
+          updateSlider(event);
+        });
+        slider.addEventListener('pointermove', event => {
+          if (event.pointerId !== pointerId) return;
+          event.preventDefault();
+          updateSlider(event);
+        });
+        const endDrag = event => {
+          if (event.pointerId !== pointerId) return;
+          if (event.type === 'pointerup') updateSlider(event);
+          pointerId = null;
+          if (slider.hasPointerCapture(event.pointerId)) slider.releasePointerCapture(event.pointerId);
+          slider.dispatchEvent(new Event('change', { bubbles: true }));
+        };
+        slider.addEventListener('pointerup', endDrag);
+        slider.addEventListener('pointercancel', endDrag);
+        slider.addEventListener('lostpointercapture', endDrag);
+      }
       for (const event of ['play', 'pause', 'ended']) player.addEventListener(event, syncPlayback);
       for (const event of ['loadedmetadata', 'durationchange', 'timeupdate', 'emptied']) {
         player.addEventListener(event, syncProgress);
@@ -116,6 +163,7 @@ ${audioVisualizerScript}
       });
       syncPlayback();
       syncProgress();
+      syncVolume();
 
       function enter(event) {
         if (event.target.closest('.back')) return;

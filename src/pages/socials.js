@@ -44,7 +44,7 @@ ${socialsStyles(theme)}
     <section class="music-widget" aria-label="Music player" hidden>
       <audio
         class="music-player"
-        hidden
+        controls
         preload="auto"
         crossorigin="anonymous"
       ></audio>

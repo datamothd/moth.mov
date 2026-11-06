@@ -159,6 +159,7 @@ export const socialsStyles = ({ highlight, muted, shadow, accent } = getSocialsT
       color: inherit;
       cursor: pointer;
     }
+    .music-widget input[type="range"] { touch-action: none; }
     .music-playback-controls > button { flex: 0 1 32px; min-width: 0; width: 32px; height: 36px; padding: 1px; }
     .music-playback-controls > button svg {
       width: min(29px, 100%);
@@ -573,5 +574,25 @@ export const socialsStyles = ({ highlight, muted, shadow, accent } = getSocialsT
       .avatar-wrap {
         flex-basis: clamp(80px, 25dvh, 140px);
       }
+    }
+    @media (max-width: 600px), (pointer: coarse) {
+      .music-widget {
+        position: relative;
+        top: auto;
+        left: auto;
+        display: block;
+        flex: none;
+        height: 54px;
+        margin: var(--page-edge-horizontal) 0 0 var(--page-edge-horizontal);
+        padding: 0;
+        border: 0;
+        border-radius: 0;
+        background: transparent;
+        box-shadow: none;
+        backdrop-filter: none;
+      }
+      .music-widget[hidden] { display: block; visibility: hidden; }
+      .music-widget > :not(.music-player):not(.music-status) { display: none; }
+      .music-widget .music-player { display: block; width: 100%; height: 54px; }
     }
 `;

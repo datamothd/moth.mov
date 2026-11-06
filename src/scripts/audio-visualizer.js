@@ -3,12 +3,18 @@ function setupAudioVisualizer(player, color = 'rgba(235, 240, 255, 0.72)') {
   const canvas = document.querySelector('.audio-visualizer');
   const drawing = canvas?.getContext('2d');
   const AudioContextClass = window.AudioContext || window.webkitAudioContext;
-  if (!drawing || !AudioContextClass) return () => {};
+  if (!drawing || !AudioContextClass) {
+    const start = () => {};
+    start.setVolume = value => { player.volume = value; };
+    return start;
+  }
 
   const barCount = 20;
   const levels = new Float32Array(barCount);
   let audioContext;
   let analyser;
+  let gain;
+  let volumeLevel = 0.3;
   let frequencies;
   let frame = 0;
   let previousTime = null;
@@ -79,8 +85,12 @@ function setupAudioVisualizer(player, color = 'rgba(235, 240, 255, 0.72)') {
         analyser.smoothingTimeConstant = 0.15;
         frequencies = new Float32Array(analyser.frequencyBinCount);
         const source = audioContext.createMediaElementSource(player);
-        source.connect(analyser);
+        gain = audioContext.createGain();
+        gain.gain.value = volumeLevel;
+        source.connect(gain);
+        gain.connect(analyser);
         analyser.connect(audioContext.destination);
+        player.volume = 1;
         audioContext.addEventListener('statechange', wake);
         canvas.hidden = false;
         resize();
@@ -104,6 +114,11 @@ function setupAudioVisualizer(player, color = 'rgba(235, 240, 255, 0.72)') {
       previousTime = null;
     } else wake();
   });
+  start.setVolume = value => {
+    volumeLevel = Math.min(1, Math.max(0, value));
+    if (gain) gain.gain.setTargetAtTime(volumeLevel, audioContext.currentTime, 0.015);
+    else player.volume = volumeLevel;
+  };
   return start;
 }
 `;
