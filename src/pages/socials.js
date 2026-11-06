@@ -5,7 +5,7 @@ import { getSocialsTheme } from '../styles/socials-theme.js';
 import { socialsScript } from '../scripts/socials.js';
 import { passportDexIcon, tiktokIcon, discordIcon } from '../icons.js';
 
-export const socialsPage = (tracks, season) => {
+export const socialsPage = (tracks, season, effect = 'meteors') => {
   const theme = getSocialsTheme(season);
   const { highlight, shadow } = theme;
   return `<!doctype html>
@@ -121,7 +121,7 @@ ${socialsStyles(theme)}
     <p class="path">/ kirby</p>
     <p class="signature">moth.mov</p>
   </div>
-  <script>${socialsScript(tracks, theme)}<\/script>
+  <script>${socialsScript(tracks, theme, effect)}<\/script>
 </body>
 </html>`;
 };

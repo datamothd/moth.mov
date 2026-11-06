@@ -4,7 +4,7 @@ import { createSpaceBackgroundScript } from './space.js';
 import { getSocialsTheme } from '../styles/socials-theme.js';
 
 const toRgb = color => color.match(/\w{2}/g).map(channel => parseInt(channel, 16)).join(', ');
-export const socialsScript = (tracks = fallbackTracks, { highlight, accent } = getSocialsTheme()) => {
+export const socialsScript = (tracks = fallbackTracks, { highlight, accent } = getSocialsTheme(), effect = 'meteors') => {
   const starTint = toRgb(highlight);
   return `
 ${audioVisualizerScript}
@@ -72,6 +72,6 @@ ${audioVisualizerScript}
       document.addEventListener('click', enter);
     })();
 
-${createSpaceBackgroundScript('socials', { starTint, meteorTint: starTint, meteorTrailTint: toRgb(accent) })}
+${createSpaceBackgroundScript('socials', { effect, starTint, meteorTint: starTint, meteorTrailTint: toRgb(accent) })}
 `;
 };

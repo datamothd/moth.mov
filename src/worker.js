@@ -47,6 +47,6 @@ export default {
     const page = hostname === "moth.mov" ? pages.get(pathname) ?? homePage : homePage;
     if (typeof page !== "function") return new Response(page, { headers: htmlHeaders });
     const preferences = await loadPreferences(env);
-    return new Response(page(preferences.tracks, preferences.season), { headers: htmlHeaders });
+    return new Response(page(preferences.tracks, preferences.season, preferences.effect), { headers: htmlHeaders });
   }
 };

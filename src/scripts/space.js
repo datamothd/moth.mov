@@ -43,6 +43,7 @@ const defaults = {
   meteorTint: '255, 255, 255',
   meteorTrailTint: '235, 240, 255',
   blueMeteors: false,
+  effect: 'meteors',
 };
 
 const presets = {
@@ -87,6 +88,7 @@ function setupSpaceBackground(canvas, animation) {
   let widthPx = 0;
   let heightPx = 0;
   let stars = [];
+  let snowflakes = [];
   let meteors = [];
   let pendingMeteorTimesMs = [];
   let frame = 0;
@@ -128,6 +130,18 @@ function setupSpaceBackground(canvas, animation) {
       hideUntilMs: 0,
       tint: Math.random() < animation.blueStarChance ? '190, 210, 255' : animation.starTint,
     }));
+    const snowflakeCount = animation.effect === 'snow'
+      ? Math.min(100, Math.round(widthPx * heightPx / 14000)) : 0;
+    snowflakes = Array.from({ length: snowflakeCount }, () => ({
+      xPx: Math.random() * widthPx,
+      yPx: Math.random() * heightPx,
+      radiusPx: randomBetween(1.5, 4),
+      alpha: randomBetween(0.3, 0.75),
+      speedPxPerMs: randomBetween(0.018, 0.055),
+      phaseRad: randomBetween(0, Math.PI * 2),
+      rotationRad: randomBetween(0, Math.PI * 2),
+      spinRadPerMs: randomBetween(-0.0003, 0.0003),
+    }));
     if (previousWidthPx && previousHeightPx) {
       for (const meteor of meteors) {
         meteor.xPx *= widthPx / previousWidthPx;
@@ -144,7 +158,7 @@ function setupSpaceBackground(canvas, animation) {
   }
 
   function spawnMeteor(progress = 0) {
-    if (meteors.length >= animation.maxMeteors) return;
+    if (animation.effect !== 'meteors' || meteors.length >= animation.maxMeteors) return;
     const durationMs = randomBetween(animation.meteorDurationMinMs, animation.meteorDurationMaxMs);
     const ageMs = progress * durationMs;
     const velocityScale = meteorVelocityScale(durationMs);
@@ -253,6 +267,30 @@ function setupSpaceBackground(canvas, animation) {
       context.arc(meteor.xPx, meteor.yPx, animation.meteorRadiusPx, 0, Math.PI * 2);
       context.fill();
       context.shadowBlur = 0;
+    }
+    for (const snowflake of snowflakes) {
+      snowflake.phaseRad += elapsedMs * 0.0006;
+      snowflake.rotationRad += elapsedMs * snowflake.spinRadPerMs;
+      snowflake.xPx += Math.sin(snowflake.phaseRad) * elapsedMs * 0.012;
+      snowflake.yPx += elapsedMs * snowflake.speedPxPerMs;
+      if (snowflake.yPx > heightPx + snowflake.radiusPx) {
+        snowflake.yPx = -snowflake.radiusPx;
+        snowflake.xPx = Math.random() * widthPx;
+      }
+      if (snowflake.xPx < -snowflake.radiusPx) snowflake.xPx = widthPx + snowflake.radiusPx;
+      if (snowflake.xPx > widthPx + snowflake.radiusPx) snowflake.xPx = -snowflake.radiusPx;
+      context.strokeStyle = 'rgba(240, 247, 255, ' + snowflake.alpha + ')';
+      context.lineWidth = 0.8;
+      context.beginPath();
+      for (let arm = 0; arm < 6; arm++) {
+        const angle = snowflake.rotationRad + arm * Math.PI / 3;
+        context.moveTo(snowflake.xPx, snowflake.yPx);
+        context.lineTo(
+          snowflake.xPx + Math.cos(angle) * snowflake.radiusPx,
+          snowflake.yPx + Math.sin(angle) * snowflake.radiusPx
+        );
+      }
+      context.stroke();
     }
     if (!document.hidden) frame = requestAnimationFrame(draw);
   }
