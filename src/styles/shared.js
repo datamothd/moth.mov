@@ -6,7 +6,6 @@ export const sharedStyles = `
       --page-gutter: 24px;
       --border-width: 1px;
       --footer-font-size: clamp(13px, 1.15vw, 18px);
-      --footer-letter-spacing: 0.02em;
       --footer-path-gap: 9px;
       --navigation-height: 42px;
       --navigation-font-size: var(--footer-font-size);
@@ -35,10 +34,7 @@ export const sharedStyles = `
       justify-content: center;
       gap: var(--navigation-gap);
       height: var(--navigation-height);
-      padding-top: 0;
-      padding-right: var(--navigation-padding-right);
-      padding-bottom: 0;
-      padding-left: var(--navigation-padding-left);
+      padding: 0 var(--navigation-padding-right) 0 var(--navigation-padding-left);
       overflow: hidden;
       border: var(--border-width) solid rgba(153, 139, 224, 0.18);
       border-radius: var(--navigation-radius);
@@ -51,7 +47,7 @@ export const sharedStyles = `
       font-size: var(--navigation-font-size);
       font-weight: 500;
       line-height: 1;
-      letter-spacing: var(--footer-letter-spacing);
+      letter-spacing: calc(var(--navigation-font-size) * 0.02);
       text-decoration: none;
       backdrop-filter: blur(10px);
       transition:
@@ -112,7 +108,7 @@ export const sharedStyles = `
       font-size: var(--footer-font-size);
       font-weight: 500;
       line-height: 1;
-      letter-spacing: var(--footer-letter-spacing);
+      letter-spacing: calc(var(--footer-font-size) * 0.02);
       opacity: 0.34;
       pointer-events: none;
       user-select: none;

@@ -16,3 +16,19 @@ export const navigationArrowIcon = `
       <line x1="15.5" y1="4.5" x2="15.5" y2="13.5" />
     </svg>
 `;
+
+export const backArrowIcon = `
+      <svg
+        viewBox="0 0 20 20"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.7"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
+        <line x1="15.5" y1="10" x2="4.5" y2="10" />
+        <line x1="4.5" y1="10" x2="9" y2="5.5" />
+        <line x1="4.5" y1="10" x2="9" y2="14.5" />
+      </svg>
+`;

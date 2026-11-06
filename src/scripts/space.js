@@ -82,7 +82,7 @@ const presets = {
 const spaceBackgroundScript = `
 function setupSpaceBackground(canvas, animation) {
   const context = canvas?.getContext('2d');
-  if (!context) return () => {};
+  if (!context) return;
 
   const randomBetween = (min, max) => min + Math.random() * (max - min);
   let widthPx = 0;
@@ -306,12 +306,6 @@ function setupSpaceBackground(canvas, animation) {
   window.addEventListener('resize', resize, { passive: true });
   document.addEventListener('visibilitychange', onVisibilityChange);
   resize();
-
-  return () => {
-    cancelAnimationFrame(frame);
-    window.removeEventListener('resize', resize);
-    document.removeEventListener('visibilitychange', onVisibilityChange);
-  };
 }
 `;
 

@@ -13,17 +13,13 @@ const pages = new Map([
   ["/kirby", socialsPage],
   ["/ratings", ratingsPage]
 ]);
-const subdomains = new Map([
-  ["music.moth.mov", musicPage]
-]);
 export default {
   async fetch(request, env) {
     const { hostname, pathname, origin } = new URL(request.url);
-    const subdomainPage = subdomains.get(hostname);
-    if (subdomainPage) {
+    if (hostname === "music.moth.mov") {
       if (pathname !== "/") return fetch(request);
       const preferences = await loadPreferences(env);
-      return new Response(subdomainPage(preferences.tracks), { headers: htmlHeaders });
+      return new Response(musicPage(preferences.tracks), { headers: htmlHeaders });
     }
     if (pathname === "/profile.webp") {
       if (request.method !== "GET" && request.method !== "HEAD") {

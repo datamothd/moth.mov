@@ -3,7 +3,7 @@ import { sharedStyles } from '../styles/shared.js';
 import { socialsStyles } from '../styles/socials.js';
 import { getSocialsTheme } from '../styles/socials-theme.js';
 import { socialsScript } from '../scripts/socials.js';
-import { passportDexIcon, tiktokIcon, discordIcon } from '../icons.js';
+import { passportDexIcon, tiktokIcon, discordIcon, backArrowIcon } from '../icons.js';
 
 export const socialsPage = (tracks, season, effect = 'meteors') => {
   const theme = getSocialsTheme(season);
@@ -49,6 +49,7 @@ ${socialsStyles(theme)}
         crossorigin="anonymous"
       ></audio>
         <div class="music-artwork" role="img" aria-label="Album artwork placeholder">
+          <img class="music-cover" alt="" hidden decoding="async">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="2.5"/></svg>
         </div>
         <div class="music-info">
@@ -128,19 +129,7 @@ ${socialsStyles(theme)}
       </div>
     </main>
     <a class="navigation-link back" href="/" aria-label="Back to moth.mov">
-      <svg
-        viewBox="0 0 20 20"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="1.7"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        aria-hidden="true"
-      >
-        <line x1="15.5" y1="10" x2="4.5" y2="10" />
-        <line x1="4.5" y1="10" x2="9" y2="5.5" />
-        <line x1="4.5" y1="10" x2="9" y2="14.5" />
-      </svg>
+      ${backArrowIcon}
       <span>back</span>
     </a>
     <p class="path">/ kirby</p>

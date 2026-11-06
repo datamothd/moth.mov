@@ -1,7 +1,7 @@
 import { spaceBackgroundMarkup, spaceBackgroundStyles } from '../components/space-background.js';
 import { sharedStyles } from '../styles/shared.js';
 import { homeStyles } from '../styles/home.js';
-import { homeScript } from '../scripts/home.js';
+import { createSpaceBackgroundScript } from '../scripts/space.js';
 import { navigationArrowIcon } from '../icons.js';
 
 export const homePage = `<!doctype html>
@@ -35,6 +35,6 @@ ${homeStyles}
     ${navigationArrowIcon}
   </a>
   <p class="signature">moth.mov</p>
-  <script>${homeScript}  <\/script>
+  <script>${createSpaceBackgroundScript('home')}  <\/script>
 </body>
 </html>`;

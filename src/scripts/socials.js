@@ -26,6 +26,7 @@ ${audioVisualizerScript}
         volumeLevel = nativePlayer.matches ? 1 : 0.3;
         startVisualizer.setVolume(volumeLevel);
         syncVolume();
+        syncArtwork(tracks[trackIndex]);
       });
       player.loop = true;
       const widget = document.querySelector('.music-widget');
@@ -37,10 +38,30 @@ ${audioVisualizerScript}
       const status = document.querySelector('.music-status');
       const title = document.querySelector('.music-title');
       const artist = document.querySelector('.music-artist');
-      title.textContent = track.title;
-      title.title = track.title;
-      artist.textContent = track.artist;
-      artist.title = track.artist;
+      const artwork = document.querySelector('.music-artwork');
+      const cover = document.querySelector('.music-cover');
+      let artworkRequest;
+      function syncArtwork(currentTrack) {
+        artworkRequest = null;
+        cover.hidden = true;
+        cover.removeAttribute('src');
+        artwork.classList.remove('has-artwork');
+        artwork.setAttribute('aria-label', 'Album artwork placeholder');
+        if (nativePlayer.matches || !currentTrack.artworkUrl) return;
+        const request = new Image();
+        artworkRequest = request;
+        request.onload = () => {
+          if (artworkRequest !== request) return;
+          cover.src = currentTrack.artworkUrl;
+          cover.hidden = false;
+          artwork.classList.add('has-artwork');
+          artwork.setAttribute('aria-label', currentTrack.title + ' by ' + currentTrack.artist + ' album artwork');
+        };
+        request.src = currentTrack.artworkUrl;
+      }
+      title.textContent = title.title = track.title;
+      artist.textContent = artist.title = track.artist;
+      syncArtwork(track);
 
       function formatTime(value) {
         const seconds = Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
@@ -62,8 +83,10 @@ ${audioVisualizerScript}
         seek.setAttribute('aria-valuetext', formatTime(player.currentTime) + ' of ' + formatTime(duration));
         const totalSeconds = Math.ceil(duration);
         const elapsedSeconds = Math.min(totalSeconds, Math.floor(player.currentTime));
-        time.textContent = formatTime(elapsedSeconds) + ' / ' + formatTime(totalSeconds);
-        time.setAttribute('aria-label', formatTime(elapsedSeconds) + ' elapsed, ' + formatTime(totalSeconds) + ' total');
+        const elapsed = formatTime(elapsedSeconds);
+        const total = formatTime(totalSeconds);
+        time.textContent = elapsed + ' / ' + total;
+        time.setAttribute('aria-label', elapsed + ' elapsed, ' + total + ' total');
       }
 
       function play() {
@@ -82,6 +105,7 @@ ${audioVisualizerScript}
         player.src = next.url;
         title.textContent = title.title = next.title;
         artist.textContent = artist.title = next.artist;
+        syncArtwork(next);
         status.textContent = '';
         syncProgress();
         syncPlayback();

@@ -103,7 +103,10 @@ export const socialsStyles = ({ highlight, muted, shadow, accent } = getSocialsT
     }
     .music-player,
     .music-widget[hidden],
-    .audio-visualizer[hidden] { display: none; }
+    .audio-visualizer[hidden],
+    .music-cover[hidden] {
+      display: none;
+    }
     .music-artwork {
       grid-column: 1;
       grid-row: 1 / 4;
@@ -113,23 +116,55 @@ export const socialsStyles = ({ highlight, muted, shadow, accent } = getSocialsT
       display: grid;
       place-items: center;
       min-height: 0;
+      overflow: hidden;
       border-radius: var(--profile-radius);
       border: var(--border-width) solid #ffffff26;
       background: linear-gradient(145deg, #ffffff12, #ffffff05);
       color: #bcbcbc;
     }
-    .music-artwork svg { width: 40px; height: 40px; opacity: 0.65; }
-    .music-info { grid-column: 2; grid-row: 1; min-width: 0; padding-top: 3px; }
+    .music-artwork svg {
+      grid-area: 1 / 1;
+      width: 40px;
+      height: 40px;
+      opacity: 0.65;
+    }
+    .music-cover {
+      grid-area: 1 / 1;
+      display: block;
+      width: 100%;
+      height: 100%;
+      min-width: 0;
+      min-height: 0;
+      object-fit: cover;
+      border-radius: inherit;
+    }
+    .music-artwork.has-artwork svg {
+      visibility: hidden;
+    }
+    .music-info {
+      grid-column: 2;
+      grid-row: 1;
+      min-width: 0;
+      padding-top: 3px;
+    }
     .music-title, .music-artist {
-      margin: 0;
+      margin: 0 0 -3px;
       padding-bottom: 3px;
-      margin-bottom: -3px;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
     }
-    .music-title { font-size: 23px; line-height: 26px; font-weight: 500; letter-spacing: -0.025em; }
-    .music-artist { margin-top: 0; font-size: 16px; line-height: 20px; color: #aaa; }
+    .music-title {
+      font-size: 23px;
+      line-height: 26px;
+      font-weight: 500;
+      letter-spacing: -0.575px;
+    }
+    .music-artist {
+      font-size: 16px;
+      line-height: 20px;
+      color: #aaa;
+    }
     .music-transport {
       grid-column: 2;
       grid-row: 2;
@@ -143,24 +178,28 @@ export const socialsStyles = ({ highlight, muted, shadow, accent } = getSocialsT
       align-items: center;
       justify-content: center;
       min-width: 0;
-      gap: 0;
     }
-    .music-control-divider { width: 12px; height: 28px; opacity: 0.55; }
+    .music-control-divider {
+      width: 12px;
+      height: 28px;
+      opacity: 0.55;
+    }
     .music-playback-controls > button, .music-volume-toggle {
       display: grid;
       place-items: center;
-      flex: none;
-      width: 30px;
-      height: 32px;
-      padding: 4px;
       border: 0;
       border-radius: 50%;
       background: transparent;
       color: inherit;
       cursor: pointer;
     }
-    .music-widget input[type="range"] { touch-action: none; }
-    .music-playback-controls > button { flex: 0 1 32px; min-width: 0; width: 32px; height: 36px; padding: 1px; }
+    .music-playback-controls > button {
+      flex: 0 1 32px;
+      min-width: 0;
+      width: 32px;
+      height: 36px;
+      padding: 1px;
+    }
     .music-playback-controls > button svg {
       width: min(29px, 100%);
       height: 29px;
@@ -174,8 +213,12 @@ export const socialsStyles = ({ highlight, muted, shadow, accent } = getSocialsT
       filter: drop-shadow(0 0 8px #ffffff30) drop-shadow(0 0 18px #ffffff1a);
     }
     .music-toggle .music-pause-icon,
-    .music-toggle.is-playing .music-play-icon { display: none; }
-    .music-toggle.is-playing .music-pause-icon { display: block; }
+    .music-toggle.is-playing .music-play-icon {
+      display: none;
+    }
+    .music-toggle.is-playing .music-pause-icon {
+      display: block;
+    }
     .music-footer {
       grid-column: 2;
       grid-row: 3;
@@ -187,6 +230,7 @@ export const socialsStyles = ({ highlight, muted, shadow, accent } = getSocialsT
     .music-widget input[type="range"] {
       appearance: none;
       -webkit-appearance: none;
+      touch-action: none;
       display: block;
       min-width: 0;
       height: 24px;
@@ -195,10 +239,20 @@ export const socialsStyles = ({ highlight, muted, shadow, accent } = getSocialsT
       background: transparent;
       cursor: pointer;
     }
-    .music-widget input:disabled { cursor: default; opacity: 0.45; }
+    .music-widget input:disabled {
+      cursor: default;
+      opacity: 0.45;
+    }
     .music-widget button:focus-visible,
-    .music-widget input:focus-visible { outline: 2px solid #ddd; outline-offset: 3px; }
-    .music-seek { flex: 1 1 0; width: 100%; --progress: 0%; }
+    .music-widget input:focus-visible {
+      outline: 2px solid #ddd;
+      outline-offset: 3px;
+    }
+    .music-seek {
+      flex: 1 1 0;
+      width: 100%;
+      --progress: 0%;
+    }
     .music-widget input::-webkit-slider-runnable-track {
       height: 5px;
       border-radius: 5px;
@@ -219,7 +273,13 @@ export const socialsStyles = ({ highlight, muted, shadow, accent } = getSocialsT
       border-radius: 5px;
       background: linear-gradient(to right, #eee var(--progress), #ffffff35 var(--progress));
     }
-    .music-widget input::-moz-range-thumb { width: 13px; height: 13px; border: 0; border-radius: 50%; background: #f5f5f5; }
+    .music-widget input::-moz-range-thumb {
+      width: 13px;
+      height: 13px;
+      border: 0;
+      border-radius: 50%;
+      background: #f5f5f5;
+    }
     .music-time {
       flex: none;
       white-space: nowrap;
@@ -229,21 +289,65 @@ export const socialsStyles = ({ highlight, muted, shadow, accent } = getSocialsT
       color: #ccc;
       text-shadow: 0 0 8px #ffffff30, 0 0 18px #ffffff1a;
     }
-    .music-volume-control { display: flex; align-items: center; justify-content: flex-start; gap: 6px; min-width: 0; }
-    .music-volume-toggle { width: 26px; height: 28px; padding: 3px; }
-    .music-volume-toggle svg { width: 22px; height: 22px; stroke-width: 2.75; }
-    .music-volume-toggle[aria-pressed="true"] { opacity: 0.5; }
-    .music-volume { flex: 1 1 54px; width: 54px; --progress: 30%; }
-    .music-status { grid-column: 1 / -1; font-size: 11px; color: #aaa; }
-    .music-status:empty { display: none; }
+    .music-volume-control {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 6px;
+      min-width: 0;
+    }
+    .music-volume-toggle {
+      flex: none;
+      width: 26px;
+      height: 28px;
+      padding: 3px;
+    }
+    .music-volume-toggle svg {
+      width: 22px;
+      height: 22px;
+      stroke-width: 2.75;
+    }
+    .music-volume-toggle[aria-pressed="true"] {
+      opacity: 0.5;
+    }
+    .music-volume {
+      flex: 1 1 54px;
+      width: 54px;
+      --progress: 30%;
+    }
+    .music-status {
+      grid-column: 1 / -1;
+      font-size: 11px;
+      color: #aaa;
+    }
+    .music-status:empty {
+      display: none;
+    }
     @media (max-width: 480px) {
-      .music-widget { grid-template-columns: 92px minmax(0, 1fr); grid-template-rows: 56px 36px 24px; column-gap: 10px; }
-      .music-artwork { grid-row: 1 / 3; }
-      .music-title { font-size: 20px; line-height: 23px; }
-      .music-artist { font-size: 14px; line-height: 20px; }
-      .music-footer { grid-column: 1 / -1; gap: 10px; align-self: end; }
-      .music-volume { width: 54px; }
-      .music-time { font-size: 11px; }
+      .music-widget {
+        grid-template-columns: 92px minmax(0, 1fr);
+        grid-template-rows: 56px 36px 24px;
+        column-gap: 10px;
+      }
+      .music-artwork {
+        grid-row: 1 / 3;
+      }
+      .music-title {
+        font-size: 20px;
+        line-height: 23px;
+        letter-spacing: -0.5px;
+      }
+      .music-artist {
+        font-size: 14px;
+      }
+      .music-footer {
+        grid-column: 1 / -1;
+        gap: 10px;
+        align-self: end;
+      }
+      .music-time {
+        font-size: 11px;
+      }
     }
     .audio-visualizer {
       position: absolute;
@@ -299,7 +403,7 @@ export const socialsStyles = ({ highlight, muted, shadow, accent } = getSocialsT
       font-size: clamp(22px, 3vw, 34px);
       font-weight: 600;
       line-height: 1.4;
-      letter-spacing: 0.045em;
+      letter-spacing: calc(clamp(22px, 3vw, 34px) * 0.045);
       cursor: pointer;
       text-align: center;
       text-shadow: 0 0 24px color-mix(in srgb, var(--accent) 40%, transparent);
@@ -366,13 +470,14 @@ export const socialsStyles = ({ highlight, muted, shadow, accent } = getSocialsT
         color-mix(in srgb, var(--shadow) 18%, transparent) 58%,
         color-mix(in srgb, var(--accent) 12%, transparent)
       );
+      backdrop-filter: blur(18px);
+    }
+    .profile {
       box-shadow:
         0 26px 80px rgba(0, 0, 0, 0.4),
         0 0 60px color-mix(in srgb, var(--shadow) 24%, transparent),
         inset 0 1px 0 color-mix(in srgb, var(--highlight) 18%, transparent);
-      backdrop-filter: blur(18px);
     }
-    .music-widget { box-shadow: none; }
     .avatar-wrap {
       flex: none;
       width: var(--avatar-size);
@@ -399,19 +504,19 @@ export const socialsStyles = ({ highlight, muted, shadow, accent } = getSocialsT
     }
     h1 {
       margin: 0;
-      padding-inline-end: 0.065em;
-      text-indent: -0.05em;
+      padding-inline-end: calc(var(--heading-font-size) * 0.065);
+      text-indent: calc(var(--heading-font-size) * -0.05);
       color: var(--highlight);
       font-size: var(--heading-font-size);
       line-height: 1.1;
-      letter-spacing: -0.065em;
+      letter-spacing: calc(var(--heading-font-size) * -0.065);
       font-weight: 700;
     }
     .handle {
       margin: var(--handle-margin-top) 0 var(--handle-margin-bottom);
       color: var(--highlight);
       font-size: var(--handle-font-size);
-      letter-spacing: var(--footer-letter-spacing);
+      letter-spacing: calc(var(--handle-font-size) * 0.02);
     }
     .links {
       display: flex;
@@ -450,11 +555,7 @@ export const socialsStyles = ({ highlight, muted, shadow, accent } = getSocialsT
       --social-icon-size: 67px;
     }
 
-    @media (max-width: 600px), (max-height: 850px) {
-      :root {
-        --handle-margin-top: 6px;
-        --social-icon-offset-y: 0px;
-      }
+    @media (max-width: 600px), (max-height: 850px), (pointer: coarse) {
       .music-widget {
         position: relative;
         top: auto;
@@ -465,6 +566,13 @@ export const socialsStyles = ({ highlight, muted, shadow, accent } = getSocialsT
       .music-widget[hidden] {
         display: block;
         visibility: hidden;
+      }
+    }
+
+    @media (max-width: 600px), (max-height: 850px) {
+      :root {
+        --handle-margin-top: 6px;
+        --social-icon-offset-y: 0px;
       }
       main {
         grid-template-rows: minmax(0, 1fr);
@@ -577,22 +685,21 @@ export const socialsStyles = ({ highlight, muted, shadow, accent } = getSocialsT
     }
     @media (max-width: 600px), (pointer: coarse) {
       .music-widget {
-        position: relative;
-        top: auto;
-        left: auto;
         display: block;
-        flex: none;
         height: 54px;
-        margin: var(--page-edge-horizontal) 0 0 var(--page-edge-horizontal);
         padding: 0;
         border: 0;
         border-radius: 0;
         background: transparent;
-        box-shadow: none;
         backdrop-filter: none;
       }
-      .music-widget[hidden] { display: block; visibility: hidden; }
-      .music-widget > :not(.music-player):not(.music-status) { display: none; }
-      .music-widget .music-player { display: block; width: 100%; height: 54px; }
+      .music-widget > :not(.music-player):not(.music-status) {
+        display: none;
+      }
+      .music-widget .music-player {
+        display: block;
+        width: 100%;
+        height: 54px;
+      }
     }
 `;
