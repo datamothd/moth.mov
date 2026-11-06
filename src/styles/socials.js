@@ -238,6 +238,8 @@ export const socialsStyles = ({ highlight, muted, shadow, accent } = getSocialsT
       padding: var(--main-padding) var(--page-gutter);
     }
     .profile {
+      -webkit-user-select: none;
+      user-select: none;
       position: relative;
       z-index: 4;
       width: fit-content;
