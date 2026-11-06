@@ -11,7 +11,7 @@ export const socialsStyles = ({ highlight, muted, shadow, accent } = getSocialsT
       --main-padding: calc(var(--page-edge-bottom) + var(--navigation-height) + 20px);
       --audio-visualizer-height: clamp(24px, 6dvh, 72px);
       --audio-visualizer-gap: 12px;
-      --profile-padding: 20px;
+      --profile-padding: 12px;
       --profile-gap: var(--profile-padding);
       --profile-radius: 42px;
       --avatar-size: clamp(168px, 22.5vw, 234px);
@@ -239,6 +239,7 @@ export const socialsStyles = ({ highlight, muted, shadow, accent } = getSocialsT
       padding: var(--main-padding) var(--page-gutter);
     }
     .profile {
+      scale: 1.414;
       -webkit-user-select: none;
       user-select: none;
       position: relative;
@@ -290,7 +291,6 @@ export const socialsStyles = ({ highlight, muted, shadow, accent } = getSocialsT
     h1 {
       margin: 0;
       padding-inline-end: 0.065em;
-      /* Align Manrope's leading glyph bearing independently of tracking. */
       text-indent: -0.05em;
       color: var(--highlight);
       font-size: var(--heading-font-size);
@@ -341,7 +341,6 @@ export const socialsStyles = ({ highlight, muted, shadow, accent } = getSocialsT
       --social-icon-size: 67px;
     }
 
-    /* Reserve the player's own height when it shares the card's horizontal space. */
     @media (max-width: 600px), (max-height: 600px) {
       :root {
         --handle-margin-top: 6px;
@@ -383,7 +382,7 @@ export const socialsStyles = ({ highlight, muted, shadow, accent } = getSocialsT
 
     @media (min-width: 601px) and (max-height: 600px) {
       :root {
-        --profile-padding: 12px;
+        --profile-padding: 8px;
         --avatar-size: clamp(96px, 26dvh, 156px);
         --heading-font-size: clamp(32px, 8.5dvh, 51px);
         --handle-font-size: 19.5px;
@@ -400,8 +399,7 @@ export const socialsStyles = ({ highlight, muted, shadow, accent } = getSocialsT
     @media (max-width: 600px) {
       :root {
         --page-gutter: 16px;
-        --profile-padding: clamp(12px, 2dvh, 16px);
-        --profile-gap: 6px;
+        --profile-padding: clamp(8px, 1.4dvh, 12px);
         --avatar-size: min(352px, calc(100vw - (var(--page-gutter) + var(--profile-padding) + var(--border-width)) * 2));
         --heading-font-size: clamp(36px, 6.5dvh, 51px);
         --handle-font-size: 19.5px;
@@ -422,7 +420,6 @@ export const socialsStyles = ({ highlight, muted, shadow, accent } = getSocialsT
         width: 100%;
         min-height: 0;
         flex-direction: column;
-        padding-bottom: 0;
         backdrop-filter: blur(3px);
       }
       .avatar-wrap {
