@@ -239,7 +239,6 @@ export const socialsStyles = ({ highlight, muted, shadow, accent } = getSocialsT
       padding: var(--main-padding) var(--page-gutter);
     }
     .profile {
-      scale: 1.414;
       -webkit-user-select: none;
       user-select: none;
       position: relative;
@@ -380,6 +379,12 @@ export const socialsStyles = ({ highlight, muted, shadow, accent } = getSocialsT
       }
     }
 
+    @media (min-width: 601px) {
+      .profile {
+        scale: 1.414;
+      }
+    }
+
     @media (min-width: 601px) and (max-height: 600px) {
       :root {
         --profile-padding: 8px;
@@ -399,7 +404,8 @@ export const socialsStyles = ({ highlight, muted, shadow, accent } = getSocialsT
     @media (max-width: 600px) {
       :root {
         --page-gutter: 16px;
-        --profile-padding: clamp(8px, 1.4dvh, 12px);
+        --profile-padding: clamp(12px, 2dvh, 16px);
+        --profile-gap: 6px;
         --avatar-size: min(352px, calc(100vw - (var(--page-gutter) + var(--profile-padding) + var(--border-width)) * 2));
         --heading-font-size: clamp(36px, 6.5dvh, 51px);
         --handle-font-size: 19.5px;
@@ -420,6 +426,7 @@ export const socialsStyles = ({ highlight, muted, shadow, accent } = getSocialsT
         width: 100%;
         min-height: 0;
         flex-direction: column;
+        padding-bottom: 0;
         backdrop-filter: blur(3px);
       }
       .avatar-wrap {
