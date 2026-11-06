@@ -47,7 +47,8 @@ export const socialsStyles = ({ highlight, muted, shadow, accent } = getSocialsT
       background:
         radial-gradient(ellipse 31% 45% at 29% 25%, color-mix(in srgb, var(--accent) 22%, transparent), transparent 78%),
         radial-gradient(ellipse 37% 30% at 70% 62%, color-mix(in srgb, var(--shadow) 38%, transparent), transparent 80%),
-        radial-gradient(ellipse 24% 36% at 84% 18%, color-mix(in srgb, var(--muted) 15%, transparent), transparent 80%);
+        radial-gradient(ellipse 24% 36% at 84% 18%, color-mix(in srgb, var(--muted) 15%, transparent), transparent 80%),
+        radial-gradient(ellipse 35% 32% at 69% 65%, color-mix(in srgb, var(--accent) 10%, transparent), transparent 80%);
       filter: blur(70px);
     }
     .shell {
