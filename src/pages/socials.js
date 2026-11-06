@@ -53,7 +53,7 @@ ${socialsStyles(theme)}
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="2.5"/></svg>
         </div>
         <div class="music-info">
-          <p class="music-title"></p>
+          <a class="music-title" href="https://music.moth.mov/"></a>
           <p class="music-artist"></p>
         </div>
         <div class="music-transport">

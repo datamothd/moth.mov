@@ -33,6 +33,7 @@ ${audioVisualizerScript}
       const toggle = document.querySelector('.music-toggle');
       const seek = document.querySelector('.music-seek');
       const volume = document.querySelector('.music-volume');
+      const volumeControl = document.querySelector('.music-volume-control');
       const mute = document.querySelector('.music-volume-toggle');
       const time = document.querySelector('.music-time');
       const status = document.querySelector('.music-status');
@@ -133,6 +134,15 @@ ${audioVisualizerScript}
         player.muted = false;
         syncVolume();
       });
+      volumeControl.addEventListener('wheel', event => {
+        if (event.ctrlKey || event.deltaY === 0) return;
+        event.preventDefault();
+        const delta = event.deltaY * (event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? 800 : 1);
+        volumeLevel = Math.min(1, Math.max(0, (player.muted ? 0 : volumeLevel) - Math.max(-0.1, Math.min(0.1, delta / 2000))));
+        startVisualizer.setVolume(volumeLevel);
+        player.muted = false;
+        syncVolume();
+      }, { passive: false });
       mute.addEventListener('click', () => {
         if (volumeLevel === 0) {
           volumeLevel = 0.3;
@@ -149,7 +159,7 @@ ${audioVisualizerScript}
         mute.setAttribute('aria-label', silent ? 'Unmute' : 'Mute');
         mute.setAttribute('aria-pressed', String(silent));
       }
-      player.addEventListener('volumechange', syncVolume);
+      player.addEventListener('volumechange', () => syncVolume());
       for (const slider of [seek, volume]) {
         let pointerId = null;
         const updateSlider = event => {

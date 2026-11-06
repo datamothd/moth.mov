@@ -155,10 +155,17 @@ export const socialsStyles = ({ highlight, muted, shadow, accent } = getSocialsT
       white-space: nowrap;
     }
     .music-title {
+      display: block;
+      color: inherit;
+      text-decoration: none;
       font-size: 23px;
       line-height: 26px;
       font-weight: 500;
       letter-spacing: -0.575px;
+    }
+    .music-title:hover, .music-title:focus-visible {
+      text-decoration: underline;
+      text-underline-offset: 3px;
     }
     .music-artist {
       font-size: 16px;
