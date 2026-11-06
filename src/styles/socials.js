@@ -1,6 +1,6 @@
-import { highlight, muted, shadow, accent } from './socials-theme.js';
+import { getSocialsTheme } from './socials-theme.js';
 
-export const socialsStyles = `
+export const socialsStyles = ({ highlight, muted, shadow, accent } = getSocialsTheme()) => `
     :root {
       --highlight: ${highlight};
       --muted: ${muted};

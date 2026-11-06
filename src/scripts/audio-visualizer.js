@@ -55,7 +55,6 @@ function setupAudioVisualizer(player, color = 'rgba(235, 240, 255, 0.72)') {
         const high = Math.min(frequencies.length, Math.max(low + 1,
           Math.ceil(40 * Math.pow(maxFrequency / 40, (index + 1) / barCount) / binHz)));
         let sum = 0;
-        // Decibel readings retain bass dynamics that byte scaling would clip.
         for (let bin = low; bin < high; bin++) sum += Math.max(-90, frequencies[bin]);
         const level = Math.max(0, (sum / Math.max(1, high - low) + 90) / 90);
         const bassBalance = 0.6 + 0.4 * index / (barCount - 1);

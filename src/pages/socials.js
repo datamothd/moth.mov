@@ -1,11 +1,14 @@
 import { spaceBackgroundMarkup, spaceBackgroundStyles } from '../components/space-background.js';
 import { sharedStyles } from '../styles/shared.js';
 import { socialsStyles } from '../styles/socials.js';
-import { highlight, shadow } from '../styles/socials-theme.js';
+import { getSocialsTheme } from '../styles/socials-theme.js';
 import { socialsScript } from '../scripts/socials.js';
 import { passportDexIcon, tiktokIcon, discordIcon } from '../icons.js';
 
-export const socialsPage = tracks => `<!doctype html>
+export const socialsPage = (tracks, season) => {
+  const theme = getSocialsTheme(season);
+  const { highlight, shadow } = theme;
+  return `<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
@@ -22,7 +25,7 @@ export const socialsPage = tracks => `<!doctype html>
   <style>
 ${sharedStyles}
 ${spaceBackgroundStyles}
-${socialsStyles}
+${socialsStyles(theme)}
   </style>
 </head>
 <body>
@@ -118,6 +121,7 @@ ${socialsStyles}
     <p class="path">/ kirby</p>
     <p class="signature">moth.mov</p>
   </div>
-  <script>${socialsScript(tracks)}<\/script>
+  <script>${socialsScript(tracks, theme)}<\/script>
 </body>
 </html>`;
+};

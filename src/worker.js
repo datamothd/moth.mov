@@ -2,7 +2,7 @@ import { homePage } from './pages/home.js';
 import { socialsPage } from './pages/socials.js';
 import { ratingsPage } from './pages/ratings.js';
 import { musicPage } from './pages/music.js';
-import { loadTracks } from './data/music.js';
+import { loadPreferences } from './data/preferences.js';
 
 const htmlHeaders = {
   "content-type": "text/html; charset=UTF-8",
@@ -21,9 +21,9 @@ export default {
     const { hostname, pathname, origin } = new URL(request.url);
     const subdomainPage = subdomains.get(hostname);
     if (subdomainPage) {
-      return pathname === "/"
-        ? new Response(subdomainPage(await loadTracks(env)), { headers: htmlHeaders })
-        : fetch(request);
+      if (pathname !== "/") return fetch(request);
+      const preferences = await loadPreferences(env);
+      return new Response(subdomainPage(preferences.tracks), { headers: htmlHeaders });
     }
     if (hostname === "moth.mov" && socialsAliases.has(pathname)) {
       return Response.redirect("https://moth.mov/kirby", 308);
@@ -32,6 +32,8 @@ export default {
       return Response.redirect(`${origin}/`, 302);
     }
     const page = hostname === "moth.mov" ? pages.get(pathname) ?? homePage : homePage;
-    return new Response(typeof page === "function" ? page(await loadTracks(env)) : page, { headers: htmlHeaders });
+    if (typeof page !== "function") return new Response(page, { headers: htmlHeaders });
+    const preferences = await loadPreferences(env);
+    return new Response(page(preferences.tracks, preferences.season), { headers: htmlHeaders });
   }
 };
