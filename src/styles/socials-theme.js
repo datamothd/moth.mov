@@ -1,6 +1,7 @@
 import fallbackPreferences from '../../preferences.json';
 
 export const palettes = {
+  monochrome: ['#ffffff', '#888888', '#000000', '#ffffff'],
   autumn: ['#f39340', '#b16022', '#792b14', '#ec6a27'],
   winter: ['#b8dcff', '#5b83b4', '#1d3155', '#80b6ef'],
   spring: ['#ebbad4', '#9778ad', '#473354', '#b8d99b'],
