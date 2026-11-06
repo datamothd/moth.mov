@@ -41,18 +41,43 @@ ${socialsStyles(theme)}
   <div class="glow" aria-hidden="true"></div>
   <div class="shell">
     <div class="entry-dimmer" aria-hidden="true"></div>
-    <div class="music-widget" hidden>
+    <section class="music-widget" aria-label="Music player" hidden>
       <audio
         class="music-player"
-        controls
         hidden
         preload="auto"
         crossorigin="anonymous"
       ></audio>
-      <div class="song-title" role="group" aria-label="Current song">
-        <div class="song-title-scroll"><span></span><span></span></div>
+        <div class="music-artwork" role="img" aria-label="Album artwork placeholder">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="2.5"/></svg>
+        </div>
+        <div class="music-info">
+          <p class="music-title"></p>
+          <p class="music-artist"></p>
+        </div>
+        <div class="music-transport">
+          <div class="music-playback-controls">
+          <button class="music-previous" type="button" aria-label="Previous song"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M5 5h3v14H5zm14 0v14L9 12z"/></svg></button>
+        <button class="music-toggle" type="button" aria-label="Play">
+          <svg class="music-play-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+          <svg class="music-pause-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6.5" y="5" width="4" height="14" rx="1.5"/><rect x="13.5" y="5" width="4" height="14" rx="1.5"/></svg>
+        </button>
+          <button class="music-next" type="button" aria-label="Next song"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16 5h3v14h-3zM5 5l10 7-10 7z"/></svg></button>
+          </div>
+          <svg class="music-control-divider" viewBox="0 0 12 28" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" aria-hidden="true"><path d="M10 4 2 24"/></svg>
+        <div class="music-volume-control">
+          <button class="music-volume-toggle" type="button" aria-label="Mute" aria-pressed="false">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4zM15 8a6 6 0 0 1 0 8m3-11a10 10 0 0 1 0 14"/></svg>
+          </button>
+          <input class="music-volume" type="range" min="0" max="1" value="0.3" step="0.01" aria-label="Volume" aria-orientation="horizontal">
+        </div>
+        </div>
+      <div class="music-footer">
+      <input class="music-seek" type="range" min="0" max="0" value="0" step="0.1" aria-label="Seek" disabled>
+        <span class="music-time">0:00 / 0:00</span>
       </div>
-    </div>
+      <span class="music-status" role="status"></span>
+    </section>
     <main>
       <div class="profile-stage">
         <section class="profile" inert tabindex="-1" aria-label="Kirby's social links">
