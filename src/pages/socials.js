@@ -60,7 +60,7 @@ ${socialsStyles(theme)}
           <div class="avatar-wrap">
             <img
               class="avatar"
-              src="https://pub-26ba83ba9ebe46bfac80c6a9784e2bda.r2.dev/profile.webp?v=${Date.now()}"
+              src="/profile.webp?v=${Date.now()}"
               alt="Kirby avatar"
               referrerpolicy="no-referrer"
             >

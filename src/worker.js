@@ -25,6 +25,19 @@ export default {
       const preferences = await loadPreferences(env);
       return new Response(subdomainPage(preferences.tracks), { headers: htmlHeaders });
     }
+    if (pathname === "/profile.webp") {
+      if (request.method !== "GET" && request.method !== "HEAD") {
+        return new Response("Method not allowed", { status: 405, headers: { Allow: "GET, HEAD" } });
+      }
+      const object = await env.SITE_BUCKET.get("profile.webp");
+      if (!object) return new Response("Not found", { status: 404 });
+      const headers = new Headers();
+      object.writeHttpMetadata(headers);
+      headers.set("content-type", "image/webp");
+      headers.set("cache-control", "no-cache");
+      headers.set("etag", object.httpEtag);
+      return new Response(request.method === "HEAD" ? null : object.body, { headers });
+    }
     if (hostname === "moth.mov" && socialsAliases.has(pathname)) {
       return Response.redirect("https://moth.mov/kirby", 308);
     }
