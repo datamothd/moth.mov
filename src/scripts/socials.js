@@ -2,11 +2,13 @@ import { audioVisualizerScript } from './audio-visualizer.js';
 import { musicOrigin, tracks as fallbackTracks } from '../data/music.js';
 import { createSpaceBackgroundScript } from './space.js';
 import { getSocialsTheme } from '../styles/socials-theme.js';
+import { socialIconsScript } from './social-icons.js';
 
 const toRgb = color => color.match(/\w{2}/g).map(channel => parseInt(channel, 16)).join(', ');
 export const socialsScript = (tracks = fallbackTracks, { highlight, accent } = getSocialsTheme(), effect = 'meteors') => {
   const starTint = toRgb(highlight);
   return `
+${socialIconsScript}
 ${audioVisualizerScript}
     (() => {
       const player = document.querySelector('.music-player');

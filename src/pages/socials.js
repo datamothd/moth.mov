@@ -6,6 +6,13 @@ import { getSocialsTheme } from '../styles/socials-theme.js';
 import { socialsScript } from '../scripts/socials.js';
 import { passportDexIcon, tiktokIcon, discordIcon, backArrowIcon } from '../icons.js';
 
+const socialIcon = source => `
+                <span class="social-icon" aria-hidden="true">
+                  <img class="social-icon-glow" src="${source}" alt="">
+                  <img src="${source}" alt="">
+                  <canvas></canvas>
+                </span>`;
+
 export const socialsPage = (tracks, season, effect = 'meteors') => {
   const theme = getSocialsTheme(season);
   const { highlight, shadow } = theme;
@@ -106,7 +113,7 @@ ${socialsStyles(theme)}
                 rel="noopener noreferrer"
                 aria-label="PassportDex"
               >
-                <img src="${passportDexIcon}" alt="" aria-hidden="true">
+                ${socialIcon(passportDexIcon)}
               </a>
               <a
                 class="social social--tiktok"
@@ -115,7 +122,7 @@ ${socialsStyles(theme)}
                 rel="noopener noreferrer"
                 aria-label="TikTok"
               >
-                <img src="${tiktokIcon}" alt="" aria-hidden="true">
+                ${socialIcon(tiktokIcon)}
               </a>
               <a
                 class="social"
@@ -124,7 +131,7 @@ ${socialsStyles(theme)}
                 rel="noopener noreferrer"
                 aria-label="Discord"
               >
-                <img src="${discordIcon}" alt="" aria-hidden="true">
+                ${socialIcon(discordIcon)}
               </a>
             </nav>
           </div>

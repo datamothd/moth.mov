@@ -568,20 +568,48 @@ export const socialsStyles = ({ highlight, muted, shadow, accent } = getSocialsT
       outline: var(--focus-width) solid var(--highlight);
       outline-offset: var(--focus-offset);
     }
-    .social img {
+    .social-icon {
+      position: relative;
+      display: block;
       width: var(--social-icon-size);
       height: var(--social-icon-size);
+      pointer-events: none;
+      translate: 0 var(--social-icon-offset-y);
+    }
+    .social-icon img {
+      position: relative;
+      display: block;
+      width: 100%;
+      height: 100%;
+      scale: var(--social-icon-scale);
       filter:
         url(#social-tint)
         drop-shadow(0 0 4px color-mix(in srgb, var(--muted) 40%, transparent))
         drop-shadow(0 0 10px color-mix(in srgb, var(--accent) 22%, transparent));
-      translate: 0 var(--social-icon-offset-y);
-      scale: var(--social-icon-scale);
-      transition: scale 450ms cubic-bezier(0.22, 0.75, 0.2, 1);
     }
-    .social:hover img,
-    .social:focus-visible img {
-      scale: 1.45;
+    .social-icon .social-icon-glow {
+      position: absolute;
+      inset: 0;
+      filter: url(#social-tint) blur(6px)
+        drop-shadow(0 0 10px color-mix(in srgb, var(--accent) 40%, transparent));
+      opacity: 0;
+      will-change: opacity;
+      transition: opacity 450ms cubic-bezier(0.22, 0.75, 0.2, 1);
+    }
+    .social-icon canvas {
+      position: absolute;
+      display: none;
+      max-width: none;
+    }
+    .social-icon.canvas-ready img {
+      visibility: hidden;
+    }
+    .social-icon.canvas-ready canvas {
+      display: block;
+    }
+    .social:hover .social-icon-glow,
+    .social:focus-visible .social-icon-glow {
+      opacity: 0.55;
     }
     .social--tiktok {
       --social-icon-size: 67px;

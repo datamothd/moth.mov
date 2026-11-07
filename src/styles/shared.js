@@ -131,18 +131,21 @@ export const sharedStyles = `
       pointer-events: auto;
     }
     .signature-github svg {
+      display: block;
       position: relative;
       width: 100%;
       height: 100%;
       overflow: visible;
+      transform: translateZ(0);
     }
     .signature-github .signature-github-glow {
       position: absolute;
       inset: 0;
       pointer-events: none;
       filter: blur(5px) drop-shadow(0 0 1px currentColor);
-      transform: scale(1.25);
+      transform: translateZ(0) scale(1.25);
       opacity: 0;
+      will-change: opacity;
       transition: opacity var(--navigation-duration) ease;
     }
     .signature-github:hover .signature-github-glow,
