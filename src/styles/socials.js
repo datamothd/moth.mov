@@ -100,7 +100,6 @@ export const socialsStyles = ({ highlight, muted, shadow, accent } = getSocialsT
       color: #f1f1f1;
       -webkit-user-select: none;
       user-select: none;
-      transform-origin: top left;
     }
     .song-title,
     .music-player,
@@ -456,9 +455,20 @@ export const socialsStyles = ({ highlight, muted, shadow, accent } = getSocialsT
       opacity: 0;
       visibility: hidden;
     }
-    body.entered .profile,
-    body.entered .music-widget {
+    body.entered .profile {
       animation: profile-enter 470ms both;
+    }
+    body.entered .music-widget {
+      animation: music-enter 640ms ease both;
+    }
+
+    @keyframes music-enter {
+      0% {
+        opacity: 0;
+      }
+      100% {
+        opacity: 1;
+      }
     }
 
     @keyframes profile-enter {
