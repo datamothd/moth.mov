@@ -55,7 +55,7 @@ ${sharedStyles}
     <ul class="tracks">${trackList(tracks)}
     </ul>
     ${createSignature('music.moth.mov')}
-    <a class="navigation-link back" href="https://moth.mov/" aria-label="Back to moth.mov">
+    <a class="navigation-link back" href="https://moth.mov/socials" aria-label="Back to moth.mov">
       ${backArrowIcon}
       <span>back</span>
     </a>

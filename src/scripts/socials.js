@@ -46,41 +46,67 @@ ${audioVisualizerScript}
       const songTitle = document.querySelector('.song-title');
       const scroll = document.querySelector('.song-title-scroll');
       const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+      const musicHostname = '${new URL(musicOrigin).hostname}';
       let characterOffset = 0;
-      let scrollingLabel = '';
+      let scrollingCharacters = [];
       let scrollingTimer;
       let pointerDown = false;
+      function renderScrollingTitle() {
+        for (const [index, copy] of Array.from(scroll.children).entries()) {
+          const content = document.createDocumentFragment();
+          let previousIsLink;
+          let text;
+          for (let offset = 0; offset < scrollingCharacters.length; offset++) {
+            const position = (characterOffset + offset) % scrollingCharacters.length;
+            const isLink = position < musicHostname.length;
+            if (isLink !== previousIsLink) {
+              text = document.createTextNode('');
+              if (isLink) {
+                const link = document.createElement('a');
+                link.href = '${musicOrigin}';
+                link.setAttribute('aria-label', musicHostname);
+                if (index > 0) link.tabIndex = -1;
+                link.append(text);
+                content.append(link);
+              } else content.append(text);
+              previousIsLink = isLink;
+            }
+            text.appendData(scrollingCharacters[position]);
+          }
+          copy.replaceChildren(content);
+        }
+        const copyWidth = scroll.children[0].getBoundingClientRect().width;
+        const copiesNeeded = copyWidth > 0 ? Math.max(2, Math.ceil(songTitle.clientWidth / copyWidth)) : 2;
+        while (scroll.children.length < copiesNeeded) {
+          const copy = scroll.children[0].cloneNode(true);
+          copy.setAttribute('aria-hidden', 'true');
+          copy.querySelectorAll('a').forEach(link => { link.tabIndex = -1; });
+          scroll.append(copy);
+        }
+        songTitle.scrollLeft = 0;
+      }
       function syncScrollingTitle(currentTrack) {
-        const label = '${new URL(musicOrigin).hostname} / ' + currentTrack.artist + ' - ' + currentTrack.title;
-        scrollingLabel = label + '    ';
+        const label = musicHostname + ' / ' + currentTrack.artist + ' - ' + currentTrack.title;
+        scrollingCharacters = Array.from(label + '    ');
         songTitle.setAttribute('aria-label', label);
         songTitle.title = label;
         characterOffset = 0;
-        scroll.style.transform = 'translateX(0)';
-        for (const [index, copy] of Array.from(scroll.children).entries()) {
-          const link = document.createElement('a');
-          link.href = '${musicOrigin}';
-          link.textContent = '${new URL(musicOrigin).hostname}';
-          if (index > 0) link.tabIndex = -1;
-          copy.replaceChildren(link, document.createTextNode(' / ' + currentTrack.artist + ' - ' + currentTrack.title + '    '));
-        }
+        renderScrollingTitle();
       }
       function syncScrollingTimer() {
         window.clearInterval(scrollingTimer);
         if (!nativePlayer.matches || reducedMotion.matches) return;
         scrollingTimer = window.setInterval(() => {
           if (widget.hidden || document.hidden || player.paused || pointerDown || songTitle.matches(':hover') || songTitle.contains(document.activeElement)) return;
-          characterOffset = (characterOffset + 1) % scrollingLabel.length;
-          const characterWidth = scroll.children[0].getBoundingClientRect().width / scrollingLabel.length;
-          scroll.style.transform = 'translateX(-' + characterOffset * characterWidth + 'px)';
+          characterOffset = (characterOffset + 1) % scrollingCharacters.length;
+          renderScrollingTitle();
         }, 240);
       }
       songTitle.addEventListener('pointerdown', () => { pointerDown = true; });
       window.addEventListener('pointerup', () => { pointerDown = false; });
       window.addEventListener('pointercancel', () => { pointerDown = false; });
-      songTitle.addEventListener('focusin', () => {
-        characterOffset = 0;
-        scroll.style.transform = 'translateX(0)';
+      window.addEventListener('resize', () => {
+        if (!pointerDown && !songTitle.contains(document.activeElement)) renderScrollingTitle();
       });
       nativePlayer.addEventListener('change', syncScrollingTimer);
       reducedMotion.addEventListener('change', syncScrollingTimer);
