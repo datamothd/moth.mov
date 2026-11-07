@@ -7,7 +7,8 @@
   "r2_buckets": [
     {
       "binding": "SITE_BUCKET",
-      "bucket_name": "site"
+      "bucket_name": "site",
+      "remote": true
     }
   ],
   "routes": [
