@@ -8,8 +8,8 @@ import { passportDexIcon, tiktokIcon, discordIcon, backArrowIcon } from '../icon
 
 const socialIcon = source => `
                 <span class="social-icon" aria-hidden="true">
-                  <img class="social-icon-glow" src="${source}" alt="">
-                  <img src="${source}" alt="">
+                  <span class="social-icon-glow"><img src="${source}" alt=""></span>
+                  <span class="social-icon-artwork"><img src="${source}" alt=""></span>
                   <canvas></canvas>
                 </span>`;
 

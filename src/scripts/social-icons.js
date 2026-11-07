@@ -20,7 +20,7 @@ export const socialIconsScript = `
 
   for (const icon of document.querySelectorAll('.social-icon')) {
     const link = icon.closest('.social');
-    const source = icon.querySelector('img:not(.social-icon-glow)');
+    const source = icon.querySelector('.social-icon-artwork img');
     const surface = icon.querySelector('canvas');
     const context = surface.getContext('2d');
     if (!context || !('filter' in context)) continue;
@@ -30,6 +30,7 @@ export const socialIconsScript = `
     let target = 0;
     let frame = 0;
     let revision = 0;
+    let hovered = false;
 
     function draw() {
       if (!textures) return;
@@ -45,7 +46,7 @@ export const socialIconsScript = `
     }
 
     function animate() {
-      const next = link.matches(':hover, :focus-visible') ? 1 : 0;
+      const next = hovered || link.matches(':focus-visible') ? 1 : 0;
       if (next === target) return;
       target = next;
       cancelAnimationFrame(frame);
@@ -117,7 +118,16 @@ export const socialIconsScript = `
       animate();
     }
 
-    for (const event of ['pointerenter', 'pointerleave', 'focus', 'blur']) {
+    // Touch-generated hover must not turn the first tap into an animation preview.
+    link.addEventListener('pointerenter', event => {
+      hovered = event.pointerType === 'mouse';
+      animate();
+    });
+    link.addEventListener('pointerleave', () => {
+      hovered = false;
+      animate();
+    });
+    for (const event of ['focus', 'blur']) {
       link.addEventListener(event, animate);
     }
     new ResizeObserver(() => {

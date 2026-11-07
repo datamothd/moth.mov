@@ -589,20 +589,29 @@ export const socialsStyles = ({ highlight, muted, shadow, accent } = getSocialsT
       translate: 0 var(--social-icon-offset-y);
     }
     .social-icon img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      filter: url(#social-tint);
+    }
+    /* Keep SVG tinting inside the CSS glow so its filter region cannot clip the halo. */
+    .social-icon-artwork,
+    .social-icon-glow {
       position: relative;
       display: block;
       width: 100%;
       height: 100%;
       scale: var(--social-icon-scale);
+    }
+    .social-icon-artwork {
       filter:
-        url(#social-tint)
         drop-shadow(0 0 4px color-mix(in srgb, var(--muted) 40%, transparent))
         drop-shadow(0 0 10px color-mix(in srgb, var(--accent) 22%, transparent));
     }
     .social-icon .social-icon-glow {
       position: absolute;
       inset: 0;
-      filter: url(#social-tint) blur(6px)
+      filter: blur(6px)
         drop-shadow(0 0 10px color-mix(in srgb, var(--accent) 40%, transparent));
       opacity: 0;
       will-change: opacity;
@@ -619,9 +628,13 @@ export const socialsStyles = ({ highlight, muted, shadow, accent } = getSocialsT
     .social-icon.canvas-ready canvas {
       display: block;
     }
-    .social:hover .social-icon-glow,
     .social:focus-visible .social-icon-glow {
       opacity: 0.55;
+    }
+    @media (hover: hover) and (pointer: fine) {
+      .social:hover .social-icon-glow {
+        opacity: 0.55;
+      }
     }
     .social--tiktok {
       --social-icon-size: 67px;
