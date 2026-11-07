@@ -100,6 +100,7 @@ export const socialsStyles = ({ highlight, muted, shadow, accent } = getSocialsT
       color: #f1f1f1;
       -webkit-user-select: none;
       user-select: none;
+      transform-origin: top left;
     }
     .song-title,
     .music-player,
@@ -455,7 +456,8 @@ export const socialsStyles = ({ highlight, muted, shadow, accent } = getSocialsT
       opacity: 0;
       visibility: hidden;
     }
-    body.entered .profile {
+    body.entered .profile,
+    body.entered .music-widget {
       animation: profile-enter 470ms both;
     }
 
