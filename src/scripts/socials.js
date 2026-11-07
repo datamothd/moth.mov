@@ -1,5 +1,5 @@
 import { audioVisualizerScript } from './audio-visualizer.js';
-import { tracks as fallbackTracks } from '../data/music.js';
+import { musicOrigin, tracks as fallbackTracks } from '../data/music.js';
 import { createSpaceBackgroundScript } from './space.js';
 import { getSocialsTheme } from '../styles/socials-theme.js';
 
@@ -41,6 +41,49 @@ ${audioVisualizerScript}
       const artist = document.querySelector('.music-artist');
       const artwork = document.querySelector('.music-artwork');
       const cover = document.querySelector('.music-cover');
+      const songTitle = document.querySelector('.song-title');
+      const scroll = document.querySelector('.song-title-scroll');
+      const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+      let characterOffset = 0;
+      let scrollingLabel = '';
+      let scrollingTimer;
+      let pointerDown = false;
+      function syncScrollingTitle(currentTrack) {
+        const label = '${new URL(musicOrigin).hostname} / ' + currentTrack.artist + ' - ' + currentTrack.title;
+        scrollingLabel = label + '    ';
+        songTitle.setAttribute('aria-label', label);
+        songTitle.title = label;
+        characterOffset = 0;
+        scroll.style.transform = 'translateX(0)';
+        for (const [index, copy] of Array.from(scroll.children).entries()) {
+          const link = document.createElement('a');
+          link.href = '${musicOrigin}';
+          link.textContent = '${new URL(musicOrigin).hostname}';
+          if (index > 0) link.tabIndex = -1;
+          copy.replaceChildren(link, document.createTextNode(' / ' + currentTrack.artist + ' - ' + currentTrack.title + '    '));
+        }
+      }
+      function syncScrollingTimer() {
+        window.clearInterval(scrollingTimer);
+        if (!nativePlayer.matches || reducedMotion.matches) return;
+        scrollingTimer = window.setInterval(() => {
+          if (widget.hidden || document.hidden || player.paused || pointerDown || songTitle.matches(':hover') || songTitle.contains(document.activeElement)) return;
+          characterOffset = (characterOffset + 1) % scrollingLabel.length;
+          const characterWidth = scroll.children[0].getBoundingClientRect().width / scrollingLabel.length;
+          scroll.style.transform = 'translateX(-' + characterOffset * characterWidth + 'px)';
+        }, 240);
+      }
+      songTitle.addEventListener('pointerdown', () => { pointerDown = true; });
+      window.addEventListener('pointerup', () => { pointerDown = false; });
+      window.addEventListener('pointercancel', () => { pointerDown = false; });
+      songTitle.addEventListener('focusin', () => {
+        characterOffset = 0;
+        scroll.style.transform = 'translateX(0)';
+      });
+      nativePlayer.addEventListener('change', syncScrollingTimer);
+      reducedMotion.addEventListener('change', syncScrollingTimer);
+      syncScrollingTitle(track);
+      syncScrollingTimer();
       let artworkRequest;
       let seekTime = null;
       function syncArtwork(currentTrack) {
@@ -108,6 +151,7 @@ ${audioVisualizerScript}
         title.textContent = title.title = next.title;
         artist.textContent = artist.title = next.artist;
         syncArtwork(next);
+        syncScrollingTitle(next);
         status.textContent = '';
         syncProgress();
         syncPlayback();

@@ -101,6 +101,7 @@ export const socialsStyles = ({ highlight, muted, shadow, accent } = getSocialsT
       -webkit-user-select: none;
       user-select: none;
     }
+    .song-title,
     .music-player,
     .music-widget[hidden],
     .audio-visualizer[hidden],
@@ -355,6 +356,30 @@ export const socialsStyles = ({ highlight, muted, shadow, accent } = getSocialsT
       .music-time {
         font-size: 11px;
       }
+    }
+    .song-title {
+      position: relative;
+      padding: 7px 0;
+      overflow: hidden;
+      color: var(--text);
+      font: 12px/20px 'Courier New', monospace;
+      letter-spacing: -0.7px;
+      text-shadow: 0 0 4px color-mix(in srgb, var(--highlight) 40%, transparent),
+        0 0 12px color-mix(in srgb, var(--accent) 35%, transparent);
+    }
+    .song-title::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: repeating-linear-gradient(to bottom, transparent 0 2px, #00000038 2px 3px);
+    }
+    .song-title-scroll { display: flex; width: max-content; }
+    .song-title-scroll span { white-space: pre; flex-shrink: 0; transform: scaleY(1.6); }
+    .song-title-scroll a { color: inherit; text-decoration: none; }
+    .song-title-scroll a:hover, .song-title-scroll a:focus-visible { text-decoration: underline; }
+    @media (max-width: 600px), (pointer: coarse) {
+      .song-title { display: block; }
     }
     .audio-visualizer {
       position: absolute;
@@ -693,14 +718,15 @@ export const socialsStyles = ({ highlight, muted, shadow, accent } = getSocialsT
     @media (max-width: 600px), (pointer: coarse) {
       .music-widget {
         display: block;
-        height: 54px;
+        height: auto;
+        min-height: 88px;
         padding: 0;
         border: 0;
         border-radius: 0;
         background: transparent;
         backdrop-filter: none;
       }
-      .music-widget > :not(.music-player):not(.music-status) {
+      .music-widget > :not(.music-player):not(.music-status):not(.song-title) {
         display: none;
       }
       .music-widget .music-player {

@@ -1,5 +1,6 @@
 import { spaceBackgroundMarkup, spaceBackgroundStyles } from '../components/space-background.js';
 import { sharedStyles } from '../styles/shared.js';
+import { createSignature } from '../components/signature.js';
 import { socialsStyles } from '../styles/socials.js';
 import { getSocialsTheme } from '../styles/socials-theme.js';
 import { socialsScript } from '../scripts/socials.js';
@@ -48,6 +49,9 @@ ${socialsStyles(theme)}
         preload="auto"
         crossorigin="anonymous"
       ></audio>
+      <div class="song-title" role="group" aria-label="Current song">
+        <div class="song-title-scroll"><span></span><span aria-hidden="true"></span></div>
+      </div>
         <div class="music-artwork" role="img" aria-label="Album artwork placeholder">
           <img class="music-cover" alt="" hidden decoding="async">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="2.5"/></svg>
@@ -133,7 +137,7 @@ ${socialsStyles(theme)}
       <span>back</span>
     </a>
     <p class="path">/ kirby</p>
-    <p class="signature">moth.mov</p>
+    ${createSignature()}
   </div>
   <script>${socialsScript(tracks, theme, effect)}<\/script>
 </body>

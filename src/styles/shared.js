@@ -115,6 +115,44 @@ export const sharedStyles = `
     }
     .signature {
       bottom: var(--page-edge-bottom);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .signature-github {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 1em;
+      height: 1em;
+      color: inherit;
+      text-decoration: none;
+      pointer-events: auto;
+    }
+    .signature-github svg {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+    }
+    .signature-github .signature-github-glow {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      filter: blur(5px) drop-shadow(0 0 1px currentColor);
+      transform: scale(1.25);
+      opacity: 0;
+      transition: opacity var(--navigation-duration) ease;
+    }
+    .signature-github:hover .signature-github-glow,
+    .signature-github:focus-visible .signature-github-glow {
+      opacity: 0.5;
+    }
+    .signature-github:focus-visible {
+      outline: var(--focus-width) solid currentColor;
+      outline-offset: var(--focus-offset);
+      border-radius: 50%;
     }
     .path {
       bottom: calc(var(--page-edge-bottom) + var(--footer-font-size) + var(--footer-path-gap));

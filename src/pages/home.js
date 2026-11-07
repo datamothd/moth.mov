@@ -3,6 +3,7 @@ import { sharedStyles } from '../styles/shared.js';
 import { homeStyles } from '../styles/home.js';
 import { createSpaceBackgroundScript } from '../scripts/space.js';
 import { navigationArrowIcon } from '../icons.js';
+import { createSignature } from '../components/signature.js';
 
 export const homePage = `<!doctype html>
 <html lang="en">
@@ -34,7 +35,7 @@ ${homeStyles}
     <span>ratings</span>
     ${navigationArrowIcon}
   </a>
-  <p class="signature">moth.mov</p>
+  ${createSignature()}
   <script>${createSpaceBackgroundScript('home')}  <\/script>
 </body>
 </html>`;

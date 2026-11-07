@@ -7,6 +7,7 @@ import {
   createSpaceBackgroundScript,
 } from '../components/space-background.js';
 import { sharedStyles } from '../styles/shared.js';
+import { createSignature } from '../components/signature.js';
 
 const escapeHtml = value => value.replace(/[&<>"']/g, character => ({
   '&': '&amp;',
@@ -53,7 +54,7 @@ ${sharedStyles}
     <h1>music (currently in rotation)</h1>
     <ul class="tracks">${trackList(tracks)}
     </ul>
-    <p class="signature">music.moth.mov</p>
+    ${createSignature('music.moth.mov')}
     <a class="navigation-link back" href="https://moth.mov/" aria-label="Back to moth.mov">
       ${backArrowIcon}
       <span>back</span>
