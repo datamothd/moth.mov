@@ -52,7 +52,6 @@ function setupAudioVisualizer(player, color = 'rgba(235, 240, 255, 0.72)') {
     const barWidth = Math.max(1, spacing * 0.65);
     const binHz = audioContext ? audioContext.sampleRate / analyser.fftSize : 1;
     const maxFrequency = audioContext ? Math.min(16000, audioContext.sampleRate / 2) : 16000;
-    const smoothing = 1 - Math.exp(-elapsed / (playing ? 60 : 180));
     let moving = false;
     for (let index = 0; index < barCount; index++) {
       let target = 0;
@@ -66,6 +65,8 @@ function setupAudioVisualizer(player, color = 'rgba(235, 240, 255, 0.72)') {
         const bassBalance = 0.6 + 0.4 * index / (barCount - 1);
         target = Math.min(1, level * 1.5 * bassBalance);
       }
+      if (playing && Math.abs(target - levels[index]) * (height - 4) < 1) target = levels[index];
+      const smoothing = 1 - Math.exp(-elapsed / (playing ? (target > levels[index] ? 100 : 300) : 180));
       levels[index] += (target - levels[index]) * smoothing;
       if (!playing && levels[index] < 0.002) levels[index] = 0;
       moving ||= levels[index] > 0;

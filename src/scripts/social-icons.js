@@ -118,7 +118,6 @@ export const socialIconsScript = `
       animate();
     }
 
-    // Touch-generated hover must not turn the first tap into an animation preview.
     link.addEventListener('pointerenter', event => {
       hovered = event.pointerType === 'mouse';
       animate();

@@ -594,7 +594,6 @@ export const socialsStyles = ({ highlight, muted, shadow, accent } = getSocialsT
       height: 100%;
       filter: url(#social-tint);
     }
-    /* Keep SVG tinting inside the CSS glow so its filter region cannot clip the halo. */
     .social-icon-artwork,
     .social-icon-glow {
       position: relative;
