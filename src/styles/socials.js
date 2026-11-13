@@ -1,3 +1,4 @@
+import { backStyles } from './shared.js';
 import { getSocialsTheme } from './socials-theme.js';
 
 export const socialsStyles = ({ highlight, muted, shadow, accent } = getSocialsTheme()) => `
@@ -58,27 +59,7 @@ export const socialsStyles = ({ highlight, muted, shadow, accent } = getSocialsT
       display: flex;
       flex-direction: column;
     }
-    .back {
-      --navigation-padding-left: 12px;
-      --navigation-padding-right: 14px;
-      --navigation-hover-x: -3px;
-      --navigation-hover-y: 0;
-      --navigation-layer: 5;
-      color: var(--highlight);
-      border-color: color-mix(in srgb, var(--muted) 55%, transparent);
-      background: color-mix(in srgb, var(--shadow) 30%, transparent);
-    }
-    .back::before {
-      background: radial-gradient(circle at 32% 72%, color-mix(in srgb, var(--accent) 30%, transparent), transparent 55%);
-    }
-    .back:hover,
-    .back:focus-visible {
-      color: var(--text);
-      background: color-mix(in srgb, var(--shadow) 65%, transparent);
-      border-color: var(--highlight);
-      box-shadow: 0 0 24px color-mix(in srgb, var(--accent) 18%, transparent);
-      outline-color: var(--highlight);
-    }
+${backStyles}
     .signature,
     .path {
       z-index: 4;

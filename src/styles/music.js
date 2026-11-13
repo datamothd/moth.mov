@@ -1,5 +1,12 @@
+import { backStyles } from './shared.js';
+
 export const musicStyles = `
     :root {
+      --highlight: #ffffff;
+      --muted: #888888;
+      --shadow: #000000;
+      --accent: #ffffff;
+      --text: #ffffff;
       color-scheme: dark;
       background: #000000;
       color: #ffffff;
@@ -34,6 +41,7 @@ export const musicStyles = `
       display: block;
       width: 100%;
     }
+${backStyles}
     a {
       color: inherit;
     }

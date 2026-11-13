@@ -44,8 +44,8 @@ export const musicPage = (tracks = fallbackTracks) => `<!doctype html>
   <title>music · moth.mov</title>
   <style>
 ${spaceBackgroundStyles}
-${musicStyles}
 ${sharedStyles}
+${musicStyles}
   </style>
 </head>
 <body>
