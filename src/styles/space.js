@@ -1,5 +1,6 @@
 export const spaceBackgroundStyles = `
-    .space {
+    .space,
+    .space-wave {
       position: fixed;
       inset: 0;
       width: 100%;

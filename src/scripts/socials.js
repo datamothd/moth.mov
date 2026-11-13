@@ -291,6 +291,6 @@ ${audioVisualizerScript}
       document.addEventListener('click', enter);
     })();
 
-${createSpaceBackgroundScript('socials', { effect, starTint, meteorTint: starTint, meteorTrailTint: toRgb(accent) })}
+${createSpaceBackgroundScript('socials', { effect, wave: true, starTint, meteorTint: starTint, meteorTrailTint: toRgb(accent) })}
 `;
 };

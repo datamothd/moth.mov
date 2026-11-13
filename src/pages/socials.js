@@ -45,6 +45,7 @@ ${socialsStyles(theme)}
       </filter>
     </defs>
   </svg>
+  <canvas class="space-wave" aria-hidden="true"></canvas>
   ${spaceBackgroundMarkup}
   <div class="glow" aria-hidden="true"></div>
   <div class="shell">

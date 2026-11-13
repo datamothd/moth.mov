@@ -1,3 +1,5 @@
+import { xmbWaveScript } from './xmb-wave.js';
+
 const defaults = {
   mobileBreakpointPx: 600,
   maxPixelRatio: 1.5,
@@ -95,6 +97,12 @@ function setupSpaceBackground(canvas, animation) {
   let lastTimeMs = null;
   let nextMeteorMs = 0;
   let hasSeeded = false;
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  let waveTimeMs = 0;
+  let waveGradient;
+  const waveCanvas = animation.wave ? document.querySelector('.space-wave') : null;
+  let waveRenderer = waveCanvas ? setupXmbWave(waveCanvas, animation.starTint) : null;
+  if (waveCanvas && !waveRenderer) waveCanvas.remove();
 
   function wake() {
     if (!frame && !document.hidden) {
@@ -118,6 +126,17 @@ function setupSpaceBackground(canvas, animation) {
     canvas.width = Math.round(widthPx * pixelRatio);
     canvas.height = Math.round(heightPx * pixelRatio);
     context.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
+    if (waveRenderer) {
+      waveCanvas.width = canvas.width;
+      waveCanvas.height = canvas.height;
+    }
+    if (animation.wave) {
+      waveGradient = context.createLinearGradient(0, 0, widthPx, 0);
+      waveGradient.addColorStop(0, 'rgba(' + animation.starTint + ', 0.12)');
+      waveGradient.addColorStop(0.3, 'rgba(' + animation.starTint + ', 0.7)');
+      waveGradient.addColorStop(0.7, 'rgba(' + animation.starTint + ', 0.5)');
+      waveGradient.addColorStop(1, 'rgba(' + animation.starTint + ', 0.12)');
+    }
     const starCount = Math.min(animation.maxStars, Math.round(widthPx * heightPx / animation.starAreaPx2));
     stars = Array.from({ length: starCount }, () => ({
       xPx: Math.random() * widthPx,
@@ -182,6 +201,10 @@ function setupSpaceBackground(canvas, animation) {
     const mobile = widthPx < animation.mobileBreakpointPx;
     const replaceMeteors = mobile || animation.replaceMeteors;
     context.clearRect(0, 0, widthPx, heightPx);
+    if (animation.wave) {
+      waveTimeMs += elapsedMs * (reducedMotion.matches ? 0.5 : 1);
+      drawWave(waveTimeMs / 1000);
+    }
 
     for (const star of stars) {
       if (animation.shiftStars && timeMs >= star.nextShiftMs) {
@@ -303,6 +326,46 @@ function setupSpaceBackground(canvas, animation) {
     } else wake();
   }
 
+  function drawWave(timeSec) {
+    if (waveRenderer) {
+      try {
+        if (waveRenderer(timeSec)) return;
+      } catch {}
+      waveRenderer = null;
+      waveCanvas.remove();
+    }
+    const flow = timeSec * 0.18;
+    const rows = 40;
+    const columns = 96;
+    const amplitudePx = Math.min(heightPx, widthPx * 0.8) * 0.85;
+    context.save();
+    context.strokeStyle = waveGradient;
+    for (let row = 0; row <= rows; row++) {
+      const z = row / rows * 2 - 1;
+      context.beginPath();
+      for (let column = 0; column <= columns; column++) {
+        const u = column / columns;
+        const x = u * 2 - 1;
+        const band = Math.sin(flow * 0.25 + z * 1.7 + u * 6.2) * 0.09
+          + Math.cos(z * 7 + u * 4.8 + flow * 0.09) * 0.01125;
+        const base = (Math.cos(x * 2 - timeSec * 0.5) * 0.09 - 0.1
+          + 0.12 * Math.sin(x * 0.306001 + flow * 0.25)) * 0.5;
+        const height = band + Math.sin(x * 5.67726 + flow) * 0.05
+          - 0.22 * Math.tanh(base / 0.22);
+        const yPx = heightPx * 0.5 - height * amplitudePx;
+        if (column === 0) context.moveTo(0, yPx);
+        else context.lineTo(u * widthPx, yPx);
+      }
+      context.globalAlpha = 0.035;
+      context.lineWidth = 6;
+      context.stroke();
+      context.globalAlpha = 0.08 + Math.pow(Math.cos(z * 3.5 + flow * 0.12), 12) * 0.24;
+      context.lineWidth = 0.65;
+      context.stroke();
+    }
+    context.restore();
+  }
+
   window.addEventListener('resize', resize, { passive: true });
   document.addEventListener('visibilitychange', onVisibilityChange);
   resize();
@@ -312,5 +375,5 @@ function setupSpaceBackground(canvas, animation) {
 export function createSpaceBackgroundScript(preset = 'socials', overrides = {}) {
   if (!Object.hasOwn(presets, preset)) throw new Error(`Unknown space preset: ${preset}`);
   const settings = JSON.stringify({ ...defaults, ...presets[preset], ...overrides }).replace(/</g, '\\u003c');
-  return `(${spaceBackgroundScript})(document.querySelector('.space'), ${settings});`;
+  return `${overrides.wave ? xmbWaveScript : ''}\n(${spaceBackgroundScript})(document.querySelector('.space'), ${settings});`;
 }
