@@ -98,7 +98,7 @@ function setupSpaceBackground(canvas, animation) {
   let nextMeteorMs = 0;
   let hasSeeded = false;
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-  let waveTimeMs = 0;
+  let waveTimeMs = Math.random() * 60000;
   let waveGradient;
   const waveCanvas = animation.wave ? document.querySelector('.space-wave') : null;
   let waveRenderer = waveCanvas ? setupXmbWave(waveCanvas, animation.starTint) : null;
@@ -131,7 +131,8 @@ function setupSpaceBackground(canvas, animation) {
       waveCanvas.height = canvas.height;
     }
     if (animation.wave) {
-      waveGradient = context.createLinearGradient(0, 0, widthPx, 0);
+      const mobile = widthPx < animation.mobileBreakpointPx;
+      waveGradient = context.createLinearGradient(0, 0, mobile ? 0 : widthPx, mobile ? heightPx : 0);
       waveGradient.addColorStop(0, 'rgba(' + animation.starTint + ', 0.12)');
       waveGradient.addColorStop(0.3, 'rgba(' + animation.starTint + ', 0.7)');
       waveGradient.addColorStop(0.7, 'rgba(' + animation.starTint + ', 0.5)');
@@ -202,7 +203,7 @@ function setupSpaceBackground(canvas, animation) {
     const replaceMeteors = mobile || animation.replaceMeteors;
     context.clearRect(0, 0, widthPx, heightPx);
     if (animation.wave) {
-      waveTimeMs += elapsedMs * (reducedMotion.matches ? 0.5 : 1);
+      waveTimeMs += elapsedMs * (reducedMotion.matches ? 0.5 : 1) * (mobile ? 0.5 : 1);
       drawWave(waveTimeMs / 1000);
     }
 
@@ -327,9 +328,10 @@ function setupSpaceBackground(canvas, animation) {
   }
 
   function drawWave(timeSec) {
+    const mobile = widthPx < animation.mobileBreakpointPx;
     if (waveRenderer) {
       try {
-        if (waveRenderer(timeSec)) return;
+        if (waveRenderer(timeSec, mobile)) return;
       } catch {}
       waveRenderer = null;
       waveCanvas.remove();
@@ -337,7 +339,9 @@ function setupSpaceBackground(canvas, animation) {
     const flow = timeSec * 0.18;
     const rows = 40;
     const columns = 96;
-    const amplitudePx = Math.min(heightPx, widthPx * 0.8) * 0.85;
+    const crossPx = mobile ? widthPx : heightPx;
+    const spanPx = mobile ? heightPx : widthPx;
+    const amplitudePx = Math.min(crossPx, spanPx * 0.8) * 0.85 * (mobile ? 2.85 : 1);
     context.save();
     context.strokeStyle = waveGradient;
     for (let row = 0; row <= rows; row++) {
@@ -345,16 +349,21 @@ function setupSpaceBackground(canvas, animation) {
       context.beginPath();
       for (let column = 0; column <= columns; column++) {
         const u = column / columns;
-        const x = u * 2 - 1;
-        const band = Math.sin(flow * 0.25 + z * 1.7 + u * 6.2) * 0.09
-          + Math.cos(z * 7 + u * 4.8 + flow * 0.09) * 0.01125;
+        const x = (u * 2 - 1) * (mobile ? 0.55 : 1);
+        const sampleU = (x + 1) * 0.5;
+        let band = Math.sin(flow * 0.25 + z * 1.7 + sampleU * 6.2) * 0.09
+          + Math.cos(z * 7 + sampleU * 4.8 + flow * 0.09) * 0.01125;
+        if (mobile) band -= Math.sin(flow * 0.25 + sampleU * 6.2) * 0.09 * Math.sin(1.7) / 1.7
+          + Math.cos(sampleU * 4.8 + flow * 0.09) * 0.01125 * Math.sin(7) / 7;
         const base = (Math.cos(x * 2 - timeSec * 0.5) * 0.09 - 0.1
           + 0.12 * Math.sin(x * 0.306001 + flow * 0.25)) * 0.5;
-        const height = band + Math.sin(x * 5.67726 + flow) * 0.05
-          - 0.22 * Math.tanh(base / 0.22);
-        const yPx = heightPx * 0.5 - height * amplitudePx;
-        if (column === 0) context.moveTo(0, yPx);
-        else context.lineTo(u * widthPx, yPx);
+        const sway = Math.sin(x * 5.67726 + flow) * 0.05 - 0.22 * Math.tanh(base / 0.22);
+        const height = band * (mobile ? 1.6 : 1) + sway * (mobile ? 0.1 : 1);
+        const offsetPx = crossPx * 0.5 - height * amplitudePx;
+        const xPx = mobile ? widthPx - offsetPx : u * widthPx;
+        const yPx = mobile ? u * heightPx : offsetPx;
+        if (column === 0) context.moveTo(xPx, yPx);
+        else context.lineTo(xPx, yPx);
       }
       context.globalAlpha = 0.035;
       context.lineWidth = 6;

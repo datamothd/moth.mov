@@ -33,7 +33,7 @@ function setupXmbWave(canvas, tint) {
 
       rePipelineBlend: 0.45,
       reDescriptorStrength: 0.7,
-      reSyntheticDescriptorSeed: 1337,
+      reSyntheticDescriptorSeed: Math.floor(Math.random() * 2147483647) + 1,
       reSyntheticDescriptorMotion: 0.65,
       reKernelGain: 0.04,
       reNormalizeGain: 0.08,
@@ -465,6 +465,7 @@ function setupXmbWave(canvas, tint) {
        in vec2 aPos;
        uniform sampler2D uSplineTex;
        uniform float uTime;
+       uniform bool vertical;
        uniform float flowSpeed;
        uniform float tension;
        uniform float damping;
@@ -485,12 +486,14 @@ function setupXmbWave(canvas, tint) {
        uniform vec3 ffdOffset;
        out vec3 vPos;
        void main() {
-         vec3 p = vec3(aPos.x, 0.0, aPos.y);
-         vec2 uv = (aPos + 1.0) * 0.5;
-         p.y = texture(uSplineTex, uv).r;
+         float along = aPos.x * (vertical ? 0.55 : 1.0);
+         float sway = vertical ? 0.1 : 1.0;
+         vec3 p = vec3(along, 0.0, aPos.y);
+         vec2 uv = (vec2(along, aPos.y) + 1.0) * 0.5;
+         p.y = texture(uSplineTex, uv).r * (vertical ? 1.6 : 1.0);
          vec3 ffd1 = p * ffdScale1 + ffdOffset;
          vec3 ffd2 = p * ffdScale2 + ffdOffset;
-         p.y += sin(ffd1.x + uTime * flowSpeed) * ffdYAmp;
+         p.y += sin(ffd1.x + uTime * flowSpeed) * ffdYAmp * sway;
          p.z += cos(ffd2.z + uTime * flowSpeed) * ffdZAmp;
          float baseWave = cos(p.x * 2.0 - uTime * 0.5 * timeStep) * waveCosAmp + waveBias;
          baseWave *= (1.0 - damping);
@@ -501,11 +504,11 @@ function setupXmbWave(canvas, tint) {
          );
          float totalWave = (baseWave + structured) * waveHeightScale;
          totalWave = waveSoftClip * tanh(totalWave / max(waveSoftClip, 1e-4));
-         p.y -= totalWave;
+         p.y -= totalWave * sway;
          vec2 uv2 = uv;
          uv2.x = fract(uv2.x - uTime * flowSpeed * 0.04 * timeStep);
          p.z -= texture(uSplineTex, uv2).r * zDetailScale;
-         gl_Position = vec4(p, 1.0);
+         gl_Position = vertical ? vec4(p.y * 4.8, -aPos.x, p.z, 1.0) : vec4(p, 1.0);
          vPos = p;
        }\`,
       \`#version 300 es
@@ -546,6 +549,7 @@ function setupXmbWave(canvas, tint) {
       tint: uloc(gl, waveProg, 'tint'),
       tex: uloc(gl, waveProg, 'uSplineTex'),
       time: uloc(gl, waveProg, 'uTime'),
+      vertical: uloc(gl, waveProg, 'vertical'),
       flowSpeed: uloc(gl, waveProg, 'flowSpeed'),
       tension: uloc(gl, waveProg, 'tension'),
       damping: uloc(gl, waveProg, 'damping'),
@@ -602,20 +606,28 @@ ${xmbParticlesScript}
     gl.enable(gl.BLEND);
     gl.clearColor(0, 0, 0, 0);
 
-    return timeSec => {
+    return (timeSec, vertical) => {
       if (gl.isContextLost()) return false;
       gl.useProgram(waveProg);
       gl.blendFuncSeparate(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA, gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
       gl.viewport(0, 0, canvas.width, canvas.height);
       gl.clear(gl.COLOR_BUFFER_BIT);
       reversePipeline.writeDisplacementTexture(settings, timeSec, splineData, STEX_W, STEX_H);
+      if (vertical) {
+        for (let column = 0; column < STEX_W; column++) {
+          let center = 0;
+          for (let row = 0; row < STEX_H; row++) center += splineData[row * STEX_W + column] / STEX_H;
+          for (let row = 0; row < STEX_H; row++) splineData[row * STEX_W + column] -= center;
+        }
+      }
       gl.activeTexture(gl.TEXTURE0);
       gl.bindTexture(gl.TEXTURE_2D, splineTex);
       gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, 0, STEX_W, STEX_H, gl.RED, gl.FLOAT, splineData);
       gl.uniform1f(waveU.time, timeSec);
+      gl.uniform1i(waveU.vertical, vertical);
       gl.bindVertexArray(grid.vao);
       gl.drawElements(gl.TRIANGLE_STRIP, grid.indexCount, gl.UNSIGNED_SHORT, 0);
-      renderParticles(timeSec);
+      renderParticles(timeSec, vertical);
       return gl.getError() === gl.NO_ERROR;
     };
   } catch {

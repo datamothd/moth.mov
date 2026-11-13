@@ -13,6 +13,7 @@ function createXmbParticles(gl, canvas, tint) {
      precision highp float;
      in vec3 aSeed;
      uniform float uTime;
+     uniform bool vertical;
      uniform float flowSpeed;
      uniform float ratio;
      uniform float ptSizeBase;
@@ -29,7 +30,7 @@ function createXmbParticles(gl, canvas, tint) {
          sin(time * (aSeed.y + 1.5) * 6.0 + aSeed.x * 4.0),
          y * 0.5 + 0.5) * aSeed.x + aSeed.y;
        vAlpha = opVar * opVar * (1.0 - fract(aSeed.x + time * 0.00285));
-       gl_Position = vec4(x, y, 0.0, 1.0);
+       gl_Position = vertical ? vec4(y * 4.8, -x, 0.0, 1.0) : vec4(x, y, 0.0, 1.0);
      }\`,
     \`#version 300 es
      precision highp float;
@@ -66,6 +67,7 @@ function createXmbParticles(gl, canvas, tint) {
 
   const time = uloc(gl, ptProg, 'uTime');
   const ratio = uloc(gl, ptProg, 'ratio');
+  const orientation = uloc(gl, ptProg, 'vertical');
   gl.useProgram(ptProg);
   gl.uniform3fv(uloc(gl, ptProg, 'tint'), tint.split(',').map(channel => Number(channel) / 255));
   gl.uniform1f(uloc(gl, ptProg, 'flowSpeed'), settings.flowSpeed);
@@ -74,11 +76,13 @@ function createXmbParticles(gl, canvas, tint) {
   gl.uniform1f(uloc(gl, ptProg, 'ptSizeVar'), settings.sizeVariance);
   const offsetSec = Math.random() * 1000;
 
-  return timeSec => {
+  return (timeSec, vertical) => {
     gl.blendFunc(gl.ONE, gl.ONE);
     gl.useProgram(ptProg);
     gl.uniform1f(time, timeSec + offsetSec);
-    gl.uniform1f(ratio, Math.max(1, Math.min(canvas.width / canvas.height, 2)) * 0.375);
+    const aspect = vertical ? canvas.height / canvas.width : canvas.width / canvas.height;
+    gl.uniform1f(ratio, Math.max(1, Math.min(aspect, 2)) * 0.375);
+    gl.uniform1i(orientation, vertical);
     gl.bindVertexArray(vao);
     gl.drawArrays(gl.POINTS, 0, count);
     gl.bindVertexArray(null);
