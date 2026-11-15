@@ -1,5 +1,5 @@
 export const xmbParticlesScript = `
-function createXmbParticles(gl, canvas, tint) {
+function createXmbParticles(gl, canvas, tint, intensity = 1) {
   const settings = {
     count: 2000,
     opacity: 0.4,
@@ -71,7 +71,7 @@ function createXmbParticles(gl, canvas, tint) {
   gl.useProgram(ptProg);
   gl.uniform3fv(uloc(gl, ptProg, 'tint'), tint.split(',').map(channel => Number(channel) / 255));
   gl.uniform1f(uloc(gl, ptProg, 'flowSpeed'), settings.flowSpeed);
-  gl.uniform1f(uloc(gl, ptProg, 'particleOpacity'), settings.opacity);
+  gl.uniform1f(uloc(gl, ptProg, 'particleOpacity'), settings.opacity * intensity);
   gl.uniform1f(uloc(gl, ptProg, 'ptSizeBase'), settings.sizeBase);
   gl.uniform1f(uloc(gl, ptProg, 'ptSizeVar'), settings.sizeVariance);
   const offsetSec = Math.random() * 1000;

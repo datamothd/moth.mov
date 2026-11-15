@@ -101,7 +101,9 @@ function setupSpaceBackground(canvas, animation) {
   let waveTimeMs = Math.random() * 60000;
   let waveGradient;
   const waveCanvas = animation.wave ? document.querySelector('.space-wave') : null;
-  let waveRenderer = waveCanvas ? setupXmbWave(waveCanvas, animation.starTint) : null;
+  const waveTint = animation.waveTint ?? animation.starTint;
+  const waveIntensity = animation.waveIntensity ?? 1;
+  let waveRenderer = waveCanvas ? setupXmbWave(waveCanvas, waveTint, waveIntensity) : null;
   if (waveCanvas && !waveRenderer) waveCanvas.remove();
 
   function wake() {
@@ -133,10 +135,10 @@ function setupSpaceBackground(canvas, animation) {
     if (animation.wave) {
       const mobile = widthPx < animation.mobileBreakpointPx;
       waveGradient = context.createLinearGradient(0, 0, mobile ? 0 : widthPx, mobile ? heightPx : 0);
-      waveGradient.addColorStop(0, 'rgba(' + animation.starTint + ', 0.12)');
-      waveGradient.addColorStop(0.3, 'rgba(' + animation.starTint + ', 0.7)');
-      waveGradient.addColorStop(0.7, 'rgba(' + animation.starTint + ', 0.5)');
-      waveGradient.addColorStop(1, 'rgba(' + animation.starTint + ', 0.12)');
+      waveGradient.addColorStop(0, 'rgba(' + waveTint + ', 0.12)');
+      waveGradient.addColorStop(0.3, 'rgba(' + waveTint + ', 0.7)');
+      waveGradient.addColorStop(0.7, 'rgba(' + waveTint + ', 0.5)');
+      waveGradient.addColorStop(1, 'rgba(' + waveTint + ', 0.12)');
     }
     const starCount = Math.min(animation.maxStars, Math.round(widthPx * heightPx / animation.starAreaPx2));
     stars = Array.from({ length: starCount }, () => ({
@@ -365,10 +367,10 @@ function setupSpaceBackground(canvas, animation) {
         if (column === 0) context.moveTo(xPx, yPx);
         else context.lineTo(xPx, yPx);
       }
-      context.globalAlpha = 0.035;
+      context.globalAlpha = 0.035 * waveIntensity;
       context.lineWidth = 6;
       context.stroke();
-      context.globalAlpha = 0.08 + Math.pow(Math.cos(z * 3.5 + flow * 0.12), 12) * 0.24;
+      context.globalAlpha = (0.08 + Math.pow(Math.cos(z * 3.5 + flow * 0.12), 12) * 0.24) * waveIntensity;
       context.lineWidth = 0.65;
       context.stroke();
     }

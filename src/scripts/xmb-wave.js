@@ -1,7 +1,7 @@
 import { xmbParticlesScript } from './xmb-particles.js';
 
 export const xmbWaveScript = `
-function setupXmbWave(canvas, tint) {
+function setupXmbWave(canvas, tint, intensity = 1) {
   let gl;
   try {
     gl = canvas.getContext('webgl2', { alpha: true, antialias: true, premultipliedAlpha: true });
@@ -596,12 +596,12 @@ function setupXmbWave(canvas, tint) {
     gl.uniform1f(waveU.ffdZAmp, settings.ffdZAmp);
     gl.uniform1f(waveU.zDetailScale, settings.zDetailScale);
     gl.uniform1f(waveU.opacity, settings.opacity);
-    gl.uniform1f(waveU.brightness, settings.brightness);
+    gl.uniform1f(waveU.brightness, settings.brightness * intensity);
     gl.uniform1f(waveU.fresnelPower, settings.fresnelPower);
     gl.uniform1f(waveU.fresnelScale, settings.fresnelScale);
 
 ${xmbParticlesScript}
-    const renderParticles = createXmbParticles(gl, canvas, tint);
+    const renderParticles = createXmbParticles(gl, canvas, tint, intensity);
     gl.disable(gl.DEPTH_TEST);
     gl.enable(gl.BLEND);
     gl.clearColor(0, 0, 0, 0);

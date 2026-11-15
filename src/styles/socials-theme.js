@@ -10,5 +10,9 @@ export const palettes = {
 
 export const getSocialsTheme = (season = fallbackPreferences.season) => {
   const [highlight, muted, shadow, accent] = palettes[season] ?? palettes[fallbackPreferences.season];
-  return { highlight, muted, shadow, accent };
+  return {
+    highlight, muted, shadow, accent,
+    waveTint: season === 'winter' ? '#62b8ff' : highlight,
+    waveIntensity: season === 'winter' ? 1.6 : 1,
+  };
 };

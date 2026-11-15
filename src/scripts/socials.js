@@ -5,7 +5,7 @@ import { getSocialsTheme } from '../styles/socials-theme.js';
 import { socialIconsScript } from './social-icons.js';
 
 const toRgb = color => color.match(/\w{2}/g).map(channel => parseInt(channel, 16)).join(', ');
-export const socialsScript = (tracks = fallbackTracks, { highlight, accent } = getSocialsTheme(), effect = 'meteors') => {
+export const socialsScript = (tracks = fallbackTracks, { highlight, accent, waveTint = highlight, waveIntensity = 1 } = getSocialsTheme(), effect = 'meteors') => {
   const starTint = toRgb(highlight);
   return `
 ${socialIconsScript}
@@ -291,6 +291,6 @@ ${audioVisualizerScript}
       document.addEventListener('click', enter);
     })();
 
-${createSpaceBackgroundScript('socials', { effect, wave: true, starTint, meteorTint: starTint, meteorTrailTint: toRgb(accent) })}
+${createSpaceBackgroundScript('socials', { effect, wave: true, waveTint: toRgb(waveTint), waveIntensity, starTint, meteorTint: starTint, meteorTrailTint: toRgb(accent) })}
 `;
 };
