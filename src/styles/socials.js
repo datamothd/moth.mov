@@ -498,10 +498,10 @@ ${backStyles}
       backdrop-filter: blur(18px);
     }
     .profile {
+      border-radius: calc(var(--profile-radius) + var(--profile-padding) + var(--border-width));
       box-shadow:
         0 26px 80px rgba(0, 0, 0, 0.4),
-        0 0 60px color-mix(in srgb, var(--shadow) 24%, transparent),
-        inset 0 1px 0 color-mix(in srgb, var(--highlight) 18%, transparent);
+        0 0 60px color-mix(in srgb, var(--shadow) 24%, transparent);
     }
     .avatar-wrap {
       flex: none;
