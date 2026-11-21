@@ -609,11 +609,11 @@ ${backStyles}
     .social-icon.canvas-ready canvas {
       display: block;
     }
-    .social:focus-visible .social-icon-glow {
+    .social:focus-visible .social-icon:not(.canvas-ready) .social-icon-glow {
       opacity: 0.55;
     }
     @media (hover: hover) and (pointer: fine) {
-      .social:hover .social-icon-glow {
+      .social:hover .social-icon:not(.canvas-ready) .social-icon-glow {
         opacity: 0.55;
       }
     }
