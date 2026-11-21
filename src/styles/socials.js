@@ -67,6 +67,7 @@ ${backStyles}
     }
     .music-widget {
       --profile-radius: 28px;
+      backdrop-filter: blur(18px);
       position: fixed;
       top: var(--page-edge-horizontal);
       left: var(--page-edge-horizontal);
@@ -495,9 +496,9 @@ ${backStyles}
         color-mix(in srgb, var(--shadow) 18%, transparent) 58%,
         color-mix(in srgb, var(--accent) 12%, transparent)
       );
-      backdrop-filter: blur(18px);
     }
     .profile {
+      backdrop-filter: blur(3px);
       border-radius: calc(var(--profile-radius) + var(--profile-padding) + var(--border-width));
       box-shadow:
         0 26px 80px rgba(0, 0, 0, 0.4),
@@ -709,7 +710,6 @@ ${backStyles}
         min-height: 0;
         flex-direction: column;
         padding-bottom: 0;
-        backdrop-filter: blur(3px);
       }
       .avatar-wrap {
         contain: size;
