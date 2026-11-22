@@ -1,4 +1,4 @@
-import { backStyles, cardStyles } from './shared.js';
+import { backStyles, cardStyles, musicControlStyles } from './shared.js';
 import { getSocialsTheme } from './socials-theme.js';
 
 export const socialsStyles = ({ highlight, muted, shadow, accent } = getSocialsTheme()) => `
@@ -217,58 +217,11 @@ ${backStyles}
       gap: 12px;
       min-width: 0;
     }
-    .music-widget input[type="range"] {
-      appearance: none;
-      -webkit-appearance: none;
-      touch-action: none;
-      display: block;
-      min-width: 0;
-      height: 24px;
-      padding: 0;
-      margin: 0;
-      background: transparent;
-      cursor: pointer;
-    }
-    .music-widget input:disabled {
-      cursor: default;
-      opacity: 0.45;
-    }
-    .music-widget button:focus-visible,
-    .music-widget input:focus-visible {
-      outline: 2px solid #ddd;
-      outline-offset: 3px;
-    }
+${musicControlStyles}
     .music-seek {
       flex: 1 1 0;
       width: 100%;
       --progress: 0%;
-    }
-    .music-widget input::-webkit-slider-runnable-track {
-      height: 5px;
-      border-radius: 5px;
-      background: linear-gradient(to right, #eee var(--progress), #ffffff35 var(--progress));
-    }
-    .music-widget input::-webkit-slider-thumb {
-      appearance: none;
-      -webkit-appearance: none;
-      width: 13px;
-      height: 13px;
-      margin-top: -4px;
-      border: 0;
-      border-radius: 50%;
-      background: #f5f5f5;
-    }
-    .music-widget input::-moz-range-track {
-      height: 5px;
-      border-radius: 5px;
-      background: linear-gradient(to right, #eee var(--progress), #ffffff35 var(--progress));
-    }
-    .music-widget input::-moz-range-thumb {
-      width: 13px;
-      height: 13px;
-      border: 0;
-      border-radius: 50%;
-      background: #f5f5f5;
     }
     .music-time {
       flex: none;

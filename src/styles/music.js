@@ -1,4 +1,4 @@
-import { backStyles, cardStyles } from './shared.js';
+import { backStyles, cardStyles, musicControlStyles } from './shared.js';
 
 export const musicStyles = `
     :root {
@@ -105,10 +105,79 @@ export const musicStyles = `
       color: #bcbcbc;
       font-size: 0.875rem;
     }
-    .tracks audio {
+    .tracks audio:not([hidden]) {
       display: block;
       width: 100%;
       height: 40px;
+    }
+    .track-controls:not([hidden]),
+    .track-volume {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .track-controls:not([hidden]) {
+      height: 36px;
+      margin-block: 2px;
+      padding-inline: 8px;
+      border: var(--border-width) solid #ffffff24;
+      border-radius: 12px;
+      background: #ffffff0a;
+      user-select: none;
+    }
+    .track-controls button {
+      display: grid;
+      place-items: center;
+      width: 32px;
+      height: 34px;
+      flex: none;
+      padding: 1px;
+      border: 0;
+      border-radius: 50%;
+      background: transparent;
+      color: inherit;
+      cursor: pointer;
+    }
+    .track-controls svg {
+      width: 29px;
+      height: 29px;
+      filter: drop-shadow(0 0 8px #ffffff30) drop-shadow(0 0 18px #ffffff1a);
+    }
+    .track-play svg {
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linejoin: round;
+      stroke-linecap: round;
+    }
+    .track-controls svg[hidden] {
+      display: none;
+    }
+    .track-volume button {
+      width: 26px;
+      height: 28px;
+      padding: 3px;
+    }
+    .track-volume svg {
+      width: 22px;
+      height: 22px;
+      stroke-width: 2.75;
+    }
+    .track-volume button[aria-pressed="true"] {
+      opacity: 0.5;
+    }
+${musicControlStyles}
+    .track-seek {
+      flex: 1;
+    }
+    .track-time {
+      white-space: nowrap;
+      font-size: 12px;
+      font-variant-numeric: tabular-nums;
+      color: #ccc;
+      text-shadow: 0 0 8px #ffffff30, 0 0 18px #ffffff1a;
+    }
+    .track-volume input {
+      width: 54px;
     }
 ${backStyles}
     a {

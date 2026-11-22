@@ -216,3 +216,54 @@ export const backStyles = `
       outline-color: var(--highlight);
     }
 `;
+
+export const musicControlStyles = `
+    :is(.music-widget, .track-controls) input[type="range"] {
+      appearance: none;
+      -webkit-appearance: none;
+      touch-action: none;
+      display: block;
+      min-width: 0;
+      height: 24px;
+      padding: 0;
+      margin: 0;
+      background: transparent;
+      cursor: pointer;
+    }
+    :is(.music-widget, .track-controls) input:disabled {
+      cursor: default;
+      opacity: 0.45;
+    }
+    :is(.music-widget, .track-controls) button:focus-visible,
+    :is(.music-widget, .track-controls) input:focus-visible {
+      outline: 2px solid #ddd;
+      outline-offset: 3px;
+    }
+    :is(.music-widget, .track-controls) input::-webkit-slider-runnable-track {
+      height: 5px;
+      border-radius: 5px;
+      background: linear-gradient(to right, #eee var(--progress), #ffffff35 var(--progress));
+    }
+    :is(.music-widget, .track-controls) input::-webkit-slider-thumb {
+      appearance: none;
+      -webkit-appearance: none;
+      width: 13px;
+      height: 13px;
+      margin-top: -4px;
+      border: 0;
+      border-radius: 50%;
+      background: #f5f5f5;
+    }
+    :is(.music-widget, .track-controls) input::-moz-range-track {
+      height: 5px;
+      border-radius: 5px;
+      background: linear-gradient(to right, #eee var(--progress), #ffffff35 var(--progress));
+    }
+    :is(.music-widget, .track-controls) input::-moz-range-thumb {
+      width: 13px;
+      height: 13px;
+      border: 0;
+      border-radius: 50%;
+      background: #f5f5f5;
+    }
+`;

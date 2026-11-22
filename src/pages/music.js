@@ -1,6 +1,7 @@
-import { backArrowIcon, albumArtworkIcon } from '../icons.js';
+import { backArrowIcon, albumArtworkIcon, musicPlayIcon, musicPauseIcon, musicVolumeIcon } from '../icons.js';
 import { tracks as fallbackTracks } from '../data/music.js';
 import { musicStyles } from '../styles/music.js';
+import { trackControlsScript } from '../scripts/track-controls.js';
 import {
   spaceBackgroundMarkup,
   spaceBackgroundStyles,
@@ -34,6 +35,20 @@ const trackList = tracks => tracks.map(track => `
           preload="none"
           crossorigin="anonymous"
         ></audio>
+        <div class="track-controls" role="group" aria-label="${escapeHtml(track.label)} playback" hidden>
+          <button class="track-play" type="button" aria-label="Play">
+            ${musicPlayIcon}
+            ${musicPauseIcon}
+          </button>
+          <input class="track-seek" type="range" min="0" max="0" step="any" aria-label="Seek" disabled>
+          <span class="track-time">0:00 / 0:00</span>
+          <div class="track-volume">
+            <button type="button" aria-label="Mute" aria-pressed="false">
+              ${musicVolumeIcon}
+            </button>
+            <input type="range" min="0" max="1" step="0.01" value="0.5" aria-label="Volume">
+          </div>
+        </div>
       </li>`).join('');
 
 export const musicPage = (tracks = fallbackTracks) => `<!doctype html>
@@ -68,9 +83,7 @@ ${musicStyles}
     <span>back</span>
   </a>
   <script>
-    document.querySelectorAll('.tracks audio').forEach(player => {
-      player.volume = 0.5;
-    });
+    ${trackControlsScript}
     document.querySelectorAll('.track-artwork img').forEach(cover => {
       if (cover.complete && !cover.naturalWidth) cover.remove();
       else cover.addEventListener('error', () => cover.remove(), { once: true });

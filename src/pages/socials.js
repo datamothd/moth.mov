@@ -4,7 +4,7 @@ import { createSignature } from '../components/signature.js';
 import { socialsStyles } from '../styles/socials.js';
 import { getSocialsTheme } from '../styles/socials-theme.js';
 import { socialsScript } from '../scripts/socials.js';
-import { passportDexIcon, tiktokIcon, discordIcon, backArrowIcon, albumArtworkIcon } from '../icons.js';
+import { passportDexIcon, tiktokIcon, discordIcon, backArrowIcon, albumArtworkIcon, musicPlayIcon, musicPauseIcon, musicVolumeIcon } from '../icons.js';
 
 const socialIcon = source => `
                 <span class="social-icon" aria-hidden="true">
@@ -72,15 +72,15 @@ ${socialsStyles(theme)}
           <div class="music-playback-controls">
           <button class="music-previous" type="button" aria-label="Previous song"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M5 5h3v14H5zm14 0v14L9 12z"/></svg></button>
         <button class="music-toggle" type="button" aria-label="Play">
-          <svg class="music-play-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
-          <svg class="music-pause-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6.5" y="5" width="4" height="14" rx="1.5"/><rect x="13.5" y="5" width="4" height="14" rx="1.5"/></svg>
+          ${musicPlayIcon}
+          ${musicPauseIcon}
         </button>
           <button class="music-next" type="button" aria-label="Next song"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16 5h3v14h-3zM5 5l10 7-10 7z"/></svg></button>
           </div>
           <svg class="music-control-divider" viewBox="0 0 12 28" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" aria-hidden="true"><path d="M10 4 2 24"/></svg>
         <div class="music-volume-control">
           <button class="music-volume-toggle" type="button" aria-label="Mute" aria-pressed="false">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4zM15 8a6 6 0 0 1 0 8m3-11a10 10 0 0 1 0 14"/></svg>
+          ${musicVolumeIcon}
           </button>
           <input class="music-volume" type="range" min="0" max="1" value="0.3" step="0.01" aria-label="Volume" aria-orientation="horizontal">
         </div>
