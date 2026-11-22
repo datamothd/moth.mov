@@ -68,11 +68,9 @@ export const musicStyles = `
     .track-artwork {
       position: relative;
       grid-row: span 2;
-      align-self: center;
       display: grid;
       place-items: center;
-      width: clamp(42px, 14vw, 62px);
-      aspect-ratio: 1;
+      width: clamp(62px, 22vw, 84px);
       overflow: hidden;
       border: var(--border-width) solid #ffffff26;
       border-radius: 12px;
@@ -90,13 +88,15 @@ export const musicStyles = `
       object-fit: cover;
     }
     .track-name {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: baseline;
-      gap: 2px 8px;
+      display: grid;
+      gap: 2px;
       margin: 0;
       line-height: 1.25;
-      overflow-wrap: anywhere;
+    }
+    .track-name span {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
     .track-title {
       font-weight: 700;
