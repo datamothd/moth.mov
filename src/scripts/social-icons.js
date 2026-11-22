@@ -55,7 +55,6 @@ export const socialIconsScript = `
       const duration = 450 * Math.abs(target - from);
       if (!duration) return;
       const step = now => {
-        // The first frame's timestamp can precede the pointer event.
         const fraction = Math.max(0, Math.min(1, (now - started) / duration));
         progress = from + (target - from) * ease(fraction);
         draw();

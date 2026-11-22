@@ -13,23 +13,32 @@ export const musicStyles = `
       color: #ffffff;
       font-family: var(--font-family);
     }
+    html,
+    body {
+      overflow: hidden;
+    }
     body {
       margin: 0;
-      min-height: 100dvh;
+      height: 100dvh;
       display: grid;
+      grid-template-rows: minmax(0, 1fr);
       place-items: center;
-      padding: calc(var(--page-edge-bottom) + var(--navigation-height) + 16px) clamp(14px, 4vw, 24px);
+      padding: calc(var(--page-edge-bottom) + var(--navigation-height) + 8px) clamp(14px, 4vw, 24px);
     }
     .music-card {${cardStyles}
       --card-corner-opacity-scale: 0.6;
       --card-center-opacity: 14%;
       position: relative;
       width: min(100%, 560px);
+      max-height: 100%;
+      display: flex;
+      flex-direction: column;
       padding: clamp(14px, 4vw, 28px);
       backdrop-filter: blur(3px);
       box-shadow: 0 18px 56px rgba(0, 0, 0, 0.24);
     }
     h1 {
+      flex: none;
       margin: 0 0 22px;
       text-align: center;
       font-size: clamp(1.25rem, 5.5vw, 1.8rem);
@@ -41,6 +50,10 @@ export const musicStyles = `
       gap: 12px;
       margin: 0;
       padding: 0;
+      overflow-y: auto;
+      overscroll-behavior-y: contain;
+      scrollbar-width: thin;
+      scrollbar-color: #ffffff42 transparent;
     }
     .tracks li {
       display: grid;

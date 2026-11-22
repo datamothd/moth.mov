@@ -359,7 +359,7 @@ ${backStyles}
     .song-title-scroll { display: flex; width: max-content; transform: scaleY(1.6); }
     .song-title-scroll > span { white-space: pre; flex-shrink: 0; }
     .song-title-scroll a { color: inherit; text-decoration: none; }
-    .song-title-scroll a:hover, .song-title-scroll a:focus-visible { text-decoration: underline; }
+    .song-title-scroll:has(a:is(:hover, :focus-visible, :active)) a { text-decoration: underline; }
     @media (max-width: 600px), (pointer: coarse) {
       .song-title { display: block; }
     }

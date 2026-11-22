@@ -59,7 +59,7 @@ ${musicStyles}
   ${spaceBackgroundMarkup}
   <main class="music-card">
     <h1>music (currently in rotation)</h1>
-    <ul class="tracks">${trackList(tracks)}
+    <ul class="tracks" tabindex="0" aria-label="Tracks">${trackList(tracks)}
     </ul>
   </main>
   ${createSignature('music.moth.mov')}
