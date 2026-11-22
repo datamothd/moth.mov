@@ -21,7 +21,7 @@ const trackList = tracks => tracks.map(track => `
       <li>
         <div class="track-artwork" aria-hidden="true">
           ${albumArtworkIcon}
-          <img src="${escapeHtml(track.artworkUrl)}" alt="" decoding="async">
+          <img src="${escapeHtml(track.artworkUrl)}" alt="" decoding="async" draggable="false">
         </div>
         <p class="track-name">
           <span class="track-title">${escapeHtml(track.title)}</span>

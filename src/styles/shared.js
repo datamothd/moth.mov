@@ -25,6 +25,8 @@ export const sharedStyles = `
       box-sizing: border-box;
     }
     .navigation-link {
+      -webkit-user-select: none;
+      user-select: none;
       position: fixed;
       left: var(--page-edge-horizontal);
       bottom: var(--page-edge-bottom);

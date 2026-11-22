@@ -402,6 +402,8 @@ ${backStyles}
       cursor: pointer;
     }
     .entry-prompt {
+      -webkit-user-select: none;
+      user-select: none;
       position: absolute;
       top: calc(100% + 28px);
       left: 50%;

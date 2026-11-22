@@ -37,7 +37,12 @@ export const musicStyles = `
       backdrop-filter: blur(3px);
       box-shadow: 0 18px 56px rgba(0, 0, 0, 0.24);
     }
-    h1 {
+    .music-card h1,
+    .track-artwork {
+      -webkit-user-select: none;
+      user-select: none;
+    }
+    .music-card h1 {
       flex: none;
       margin: 0 0 22px;
       text-align: center;
