@@ -50,6 +50,11 @@ const defaults = {
 
 const presets = {
   socials: {},
+  music: {
+    effect: 'flight',
+    maxStars: 2400,
+    starAreaPx2: 420,
+  },
   home: {
     mobilePixelRatio: 1,
     maxStars: 180,
@@ -98,6 +103,8 @@ function setupSpaceBackground(canvas, animation) {
   let nextMeteorMs = 0;
   let hasSeeded = false;
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const flying = animation.effect === 'flight';
+  const flightNearDepth = 0.24;
   let waveTimeMs = Math.random() * 60000;
   let waveGradient;
   const waveCanvas = animation.wave ? document.querySelector('.space-wave') : null;
@@ -141,6 +148,12 @@ function setupSpaceBackground(canvas, animation) {
       waveGradient.addColorStop(1, 'rgba(' + waveTint + ', 0.12)');
     }
     const starCount = Math.min(animation.maxStars, Math.round(widthPx * heightPx / animation.starAreaPx2));
+    if (flying) {
+      stars = Array.from({ length: starCount }, (_, index) => stars[index]
+        ?? createFlightStar(Math.cbrt(randomBetween(flightNearDepth ** 3, 1))));
+      wake();
+      return;
+    }
     stars = Array.from({ length: starCount }, () => ({
       xPx: Math.random() * widthPx,
       yPx: Math.random() * heightPx,
@@ -173,6 +186,31 @@ function setupSpaceBackground(canvas, animation) {
     wake();
   }
 
+  function createFlightStar(depth = 1) {
+    return { x: randomBetween(-depth, depth), y: randomBetween(-depth, depth), depth };
+  }
+
+  function drawFlightStars(elapsedMs) {
+    const centerXPx = widthPx / 2;
+    const centerYPx = heightPx / 2;
+    context.fillStyle = 'rgb(' + animation.starTint + ')';
+    for (let index = 0; index < stars.length; index++) {
+      const star = stars[index];
+      star.depth -= elapsedMs * 0.000014;
+      const depth = star.depth;
+      if (depth <= flightNearDepth || Math.abs(star.x) > depth || Math.abs(star.y) > depth) {
+        stars[index] = createFlightStar();
+        continue;
+      }
+      const fade = Math.min(1, (1 - depth) * 12, (depth - flightNearDepth) * 45);
+      context.globalAlpha = fade * 0.25 / depth;
+      context.beginPath();
+      context.arc(centerXPx * (1 + star.x / depth), centerYPx * (1 + star.y / depth), 0.48 / depth, 0, Math.PI * 2);
+      context.fill();
+    }
+    context.globalAlpha = 1;
+  }
+
   function meteorVelocityScale(durationMs) {
     return widthPx < animation.mobileBreakpointPx
       ? Math.min(1, widthPx / (Math.abs(animation.meteorVelocityXPxPerMs) * durationMs))
@@ -201,9 +239,14 @@ function setupSpaceBackground(canvas, animation) {
       ? animation.frameDurationMs
       : Math.min(timeMs - lastTimeMs, animation.maxElapsedMs);
     lastTimeMs = timeMs;
+    context.clearRect(0, 0, widthPx, heightPx);
+    if (flying) {
+      drawFlightStars(reducedMotion.matches ? 0 : elapsedMs);
+      if (!document.hidden && !reducedMotion.matches) frame = requestAnimationFrame(draw);
+      return;
+    }
     const mobile = widthPx < animation.mobileBreakpointPx;
     const replaceMeteors = mobile || animation.replaceMeteors;
-    context.clearRect(0, 0, widthPx, heightPx);
     if (animation.wave) {
       waveTimeMs += elapsedMs * (reducedMotion.matches ? 0.5 : 1) * (mobile ? 0.5 : 1);
       drawWave(waveTimeMs / 1000);
@@ -379,6 +422,7 @@ function setupSpaceBackground(canvas, animation) {
 
   window.addEventListener('resize', resize, { passive: true });
   document.addEventListener('visibilitychange', onVisibilityChange);
+  if (flying) reducedMotion.addEventListener('change', wake);
   resize();
 }
 `;

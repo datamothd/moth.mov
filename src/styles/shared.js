@@ -181,6 +181,16 @@ export const sharedStyles = `
     }
 `;
 
+export const cardStyles = `
+      border: var(--border-width) solid color-mix(in srgb, var(--highlight) 32%, transparent);
+      border-radius: var(--profile-radius);
+      background: linear-gradient(
+        145deg,
+        color-mix(in srgb, var(--muted) calc(22% * var(--card-corner-opacity-scale, 1)), transparent),
+        color-mix(in srgb, var(--shadow) var(--card-center-opacity, 18%), transparent) 58%,
+        color-mix(in srgb, var(--accent) calc(12% * var(--card-corner-opacity-scale, 1)), transparent)
+      );`;
+
 export const backStyles = `
     .back {
       --navigation-padding-left: 12px;

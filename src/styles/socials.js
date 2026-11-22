@@ -1,4 +1,4 @@
-import { backStyles } from './shared.js';
+import { backStyles, cardStyles } from './shared.js';
 import { getSocialsTheme } from './socials-theme.js';
 
 export const socialsStyles = ({ highlight, muted, shadow, accent } = getSocialsTheme()) => `
@@ -487,15 +487,7 @@ ${backStyles}
       padding: var(--profile-padding);
     }
     .profile,
-    .music-widget {
-      border: var(--border-width) solid color-mix(in srgb, var(--highlight) 32%, transparent);
-      border-radius: var(--profile-radius);
-      background: linear-gradient(
-        145deg,
-        color-mix(in srgb, var(--muted) 22%, transparent),
-        color-mix(in srgb, var(--shadow) 18%, transparent) 58%,
-        color-mix(in srgb, var(--accent) 12%, transparent)
-      );
+    .music-widget {${cardStyles}
     }
     .profile {
       backdrop-filter: blur(3px);

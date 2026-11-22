@@ -4,7 +4,7 @@ import { createSignature } from '../components/signature.js';
 import { socialsStyles } from '../styles/socials.js';
 import { getSocialsTheme } from '../styles/socials-theme.js';
 import { socialsScript } from '../scripts/socials.js';
-import { passportDexIcon, tiktokIcon, discordIcon, backArrowIcon } from '../icons.js';
+import { passportDexIcon, tiktokIcon, discordIcon, backArrowIcon, albumArtworkIcon } from '../icons.js';
 
 const socialIcon = source => `
                 <span class="social-icon" aria-hidden="true">
@@ -62,7 +62,7 @@ ${socialsStyles(theme)}
       </div>
         <div class="music-artwork" role="img" aria-label="Album artwork placeholder">
           <img class="music-cover" alt="" hidden decoding="async">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="2.5"/></svg>
+          ${albumArtworkIcon}
         </div>
         <div class="music-info">
           <a class="music-title" href="https://music.moth.mov/"></a>

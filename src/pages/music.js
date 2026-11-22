@@ -1,4 +1,4 @@
-import { backArrowIcon } from '../icons.js';
+import { backArrowIcon, albumArtworkIcon } from '../icons.js';
 import { tracks as fallbackTracks } from '../data/music.js';
 import { musicStyles } from '../styles/music.js';
 import {
@@ -19,7 +19,14 @@ const escapeHtml = value => value.replace(/[&<>"']/g, character => ({
 
 const trackList = tracks => tracks.map(track => `
       <li>
-        <p>${escapeHtml(track.label)}</p>
+        <div class="track-artwork" aria-hidden="true">
+          ${albumArtworkIcon}
+          <img src="${escapeHtml(track.artworkUrl)}" alt="" decoding="async">
+        </div>
+        <p class="track-name">
+          <span class="track-title">${escapeHtml(track.title)}</span>
+          <span class="track-artist">${escapeHtml(track.artist)}</span>
+        </p>
         <audio
           src="${escapeHtml(track.url)}"
           aria-label="${escapeHtml(track.label)}"
@@ -38,7 +45,7 @@ export const musicPage = (tracks = fallbackTracks) => `<!doctype html>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
-    href="https://fonts.googleapis.com/css2?family=Manrope:wght@500&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700&display=swap"
     rel="stylesheet"
   >
   <title>music · moth.mov</title>
@@ -50,21 +57,25 @@ ${musicStyles}
 </head>
 <body>
   ${spaceBackgroundMarkup}
-  <main>
+  <main class="music-card">
     <h1>music (currently in rotation)</h1>
     <ul class="tracks">${trackList(tracks)}
     </ul>
-    ${createSignature('music.moth.mov')}
-    <a class="navigation-link back" href="https://moth.mov/socials" aria-label="Back to moth.mov">
-      ${backArrowIcon}
-      <span>back</span>
-    </a>
   </main>
-</body>
-<script>
+  ${createSignature('music.moth.mov')}
+  <a class="navigation-link back" href="https://moth.mov/socials" aria-label="Back to moth.mov">
+    ${backArrowIcon}
+    <span>back</span>
+  </a>
+  <script>
     document.querySelectorAll('.tracks audio').forEach(player => {
       player.volume = 0.5;
     });
-  ${createSpaceBackgroundScript()}
-<\/script>
+    document.querySelectorAll('.track-artwork img').forEach(cover => {
+      if (cover.complete && !cover.naturalWidth) cover.remove();
+      else cover.addEventListener('error', () => cover.remove(), { once: true });
+    });
+    ${createSpaceBackgroundScript('music')}
+  <\/script>
+</body>
 </html>`;
