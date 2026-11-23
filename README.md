@@ -2,5 +2,4 @@ Repository for my personal website which includes a few projects. Deployed at ht
 
 ## Planned Features:
 - Site map
-- Ratings page
 - Projects page

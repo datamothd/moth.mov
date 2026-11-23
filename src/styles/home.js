@@ -25,11 +25,6 @@ export const homeStyles = `
       );
       filter: blur(32px);
     }
-    .ratings-link {
-      bottom: calc(
-        var(--page-edge-bottom) + var(--navigation-height) + 10px
-      );
-    }
 
     @media (max-width: 600px) {
       .haze {

@@ -31,10 +31,6 @@ ${homeStyles}
     <span>socials</span>
     ${navigationArrowIcon}
   </a>
-  <a class="navigation-link ratings-link" href="/ratings" aria-label="Ratings">
-    <span>ratings</span>
-    ${navigationArrowIcon}
-  </a>
   ${createSignature()}
   <script>${createSpaceBackgroundScript('home')}  <\/script>
 </body>

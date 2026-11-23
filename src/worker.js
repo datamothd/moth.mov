@@ -1,6 +1,5 @@
 import { homePage } from './pages/home.js';
 import { socialsPage } from './pages/socials.js';
-import { ratingsPage } from './pages/ratings.js';
 import { musicPage } from './pages/music.js';
 import { loadPreferences } from './data/preferences.js';
 
@@ -9,10 +8,6 @@ const htmlHeaders = {
   "cache-control": "no-store"
 };
 const socialsAliases = new Set(["/socials", "/kirbymybae", "/kirby/"]);
-const pages = new Map([
-  ["/kirby", socialsPage],
-  ["/ratings", ratingsPage]
-]);
 export default {
   async fetch(request, env) {
     const { hostname, pathname, origin } = new URL(request.url);
@@ -37,12 +32,13 @@ export default {
     if (hostname === "moth.mov" && socialsAliases.has(pathname)) {
       return Response.redirect("https://moth.mov/kirby", 308);
     }
-    if (pathname !== "/" && !pages.has(pathname) && !socialsAliases.has(pathname)) {
+    if (pathname !== "/" && pathname !== "/kirby" && !socialsAliases.has(pathname)) {
       return Response.redirect(`${origin}/`, 302);
     }
-    const page = hostname === "moth.mov" ? pages.get(pathname) ?? homePage : homePage;
-    if (typeof page !== "function") return new Response(page, { headers: htmlHeaders });
+    if (hostname !== "moth.mov" || pathname !== "/kirby") {
+      return new Response(homePage, { headers: htmlHeaders });
+    }
     const preferences = await loadPreferences(env);
-    return new Response(page(preferences.tracks, preferences.season, preferences.effect), { headers: htmlHeaders });
+    return new Response(socialsPage(preferences.tracks, preferences.season, preferences.effect), { headers: htmlHeaders });
   }
 };
